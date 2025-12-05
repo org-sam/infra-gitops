@@ -52,7 +52,7 @@ spec:
     - clusters:
         selector:
           matchLabels:
-            keda: "enabled"
+            keda: "true"
 
   template:
     metadata:
