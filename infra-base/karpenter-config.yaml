@@ -8,7 +8,7 @@ spec:
   - list:
       elements:
       - name: dev-demo
-        server: https://BEA985975C61ACBB85DBAA30E8CEA98F.gr7.us-east-2.eks.amazonaws.com
+        server: https://kubernetes.default.svc
         node_role: arn:aws:iam::703669458031:role/eks-node-initial-eks-node-group-20251205231303599500000003
 
   template:

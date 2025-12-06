@@ -8,7 +8,7 @@ spec:
     - list:
         elements:
           - cluster: cluster-01
-            url: https://BEA985975C61ACBB85DBAA30E8CEA98F.gr7.us-east-2.eks.amazonaws.com
+            url: https://kubernetes.default.svc
             namespace: caos
             path: k8s/caos
   template:
