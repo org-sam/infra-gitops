@@ -16,6 +16,8 @@ spec:
   template:
     metadata:
       name: "karpenter-{{name}}"
+      annotations:
+        argocd.argoproj.io/sync-wave: "0"
     spec:
       project: default
 
