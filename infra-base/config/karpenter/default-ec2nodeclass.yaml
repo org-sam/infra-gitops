@@ -1,21 +1,21 @@
-# apiVersion: karpenter.k8s.aws/v1
-# kind: EC2NodeClass
-# metadata:
-#   name: default
-# spec:
-#   amiSelectorTerms:
-#     - alias: al2023@latest
+apiVersion: karpenter.k8s.aws/v1
+kind: EC2NodeClass
+metadata:
+  name: default
+spec:
+  amiSelectorTerms:
+    - alias: al2023@latest
 
-#   role: "{{ .Values.nodeRole }}"
+  role: "{{ .Values.nodeRole }}"
 
-#   subnetSelectorTerms:
-#     - tags:
-#         karpenter.sh/discovery: "{{ .Values.clusterName }}"
+  subnetSelectorTerms:
+    - tags:
+        karpenter.sh/discovery: "{{ .Values.clusterName }}"
 
-#   securityGroupSelectorTerms:
-#     - tags:
-#         karpenter.sh/discovery: "{{ .Values.clusterName }}"
+  securityGroupSelectorTerms:
+    - tags:
+        karpenter.sh/discovery: "{{ .Values.clusterName }}"
 
-#   tags:
-#     Name: "karpenter-node-{{ .Values.clusterName }}"
-#     karpenter.sh/discovery: "{{ .Values.clusterName }}"
+  tags:
+    Name: "karpenter-node-{{ .Values.clusterName }}"
+    karpenter.sh/discovery: "{{ .Values.clusterName }}"
