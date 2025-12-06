@@ -1,0 +1,31 @@
+apiVersion: argoproj.io/v1alpha1
+kind: ApplicationSet
+metadata:
+  name: caos-appset
+  namespace: argocd
+spec:
+  generators:
+    - list:
+        elements:
+          - cluster: cluster-01
+            url: https://BEA985975C61ACBB85DBAA30E8CEA98F.gr7.us-east-2.eks.amazonaws.com
+            namespace: caos
+            path: k8s/caos
+  template:
+      metadata:
+        name: "app-{{namespace}}-{{cluster}}"
+      spec:
+        project: default
+        source:
+          path: "{{path}}"
+          repoURL: https://github.com/isamuelalmeida/applications-gitops-teste
+          targetRevision: HEAD
+        destination:
+          namespace: "{{namespace}}"
+          server: "{{url}}"
+        syncPolicy:
+          automated:
+            prune: true
+            selfHeal: true
+          syncOptions:
+            - CreateNamespace=true
