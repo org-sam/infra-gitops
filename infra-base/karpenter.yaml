@@ -1,60 +1,60 @@
-apiVersion: argoproj.io/v1alpha1
-kind: ApplicationSet
-metadata:
-  name: karpenter
-  namespace: argocd
-spec:
-  generators:
-  - list:
-      elements:
-      - name: dev-demo
-        server: https://kubernetes.default.svc
-        role_arn: arn:aws:iam::703669458031:role/KarpenterController-20251205231302265200000001
-        queue_name: Karpenter-dev-demo
-        revision: 1.8.2
+# apiVersion: argoproj.io/v1alpha1
+# kind: ApplicationSet
+# metadata:
+#   name: karpenter
+#   namespace: argocd
+# spec:
+#   generators:
+#   - list:
+#       elements:
+#       - name: dev-demo
+#         server: https://kubernetes.default.svc
+#         role_arn: arn:aws:iam::703669458031:role/KarpenterController-20251205231302265200000001
+#         queue_name: Karpenter-dev-demo
+#         revision: 1.8.2
 
-  template:
-    metadata:
-      name: "karpenter-{{name}}"
-      annotations:
-        argocd.argoproj.io/sync-wave: "0"
-    spec:
-      project: default
+#   template:
+#     metadata:
+#       name: "karpenter-{{name}}"
+#       annotations:
+#         argocd.argoproj.io/sync-wave: "0"
+#     spec:
+#       project: default
 
-      source:
-        repoURL: public.ecr.aws/karpenter
-        chart: karpenter
-        targetRevision: "{{revision}}"
-        helm:
-          valuesObject:
-            settings:
-              clusterName: '{{name}}'
-              clusterEndpoint: '{{server}}'
-              interruptionQueue: '{{queue_name}}'
+#       source:
+#         repoURL: public.ecr.aws/karpenter
+#         chart: karpenter
+#         targetRevision: "{{revision}}"
+#         helm:
+#           valuesObject:
+#             settings:
+#               clusterName: '{{name}}'
+#               clusterEndpoint: '{{server}}'
+#               interruptionQueue: '{{queue_name}}'
 
-            serviceAccount:
-              create: true
-              name: karpenter
-              annotations:
-                eks.amazonaws.com/role-arn: '{{role_arn}}'
+#             serviceAccount:
+#               create: true
+#               name: karpenter
+#               annotations:
+#                 eks.amazonaws.com/role-arn: '{{role_arn}}'
 
-            controller:
-              resources:
-                requests:
-                  cpu: 100m
-                  memory: 256Mi
-                limits:
-                  cpu: 500m
-                  memory: 1Gi
+#             controller:
+#               resources:
+#                 requests:
+#                   cpu: 100m
+#                   memory: 256Mi
+#                 limits:
+#                   cpu: 500m
+#                   memory: 1Gi
 
-      destination:
-        server: "{{server}}"
-        namespace: karpenter
+#       destination:
+#         server: "{{server}}"
+#         namespace: karpenter
 
-      syncPolicy:
-        automated:
-          prune: true
-          selfHeal: true
-        syncOptions:
-          - CreateNamespace=true
-          - ServerSideApply=true
+#       syncPolicy:
+#         automated:
+#           prune: true
+#           selfHeal: true
+#         syncOptions:
+#           - CreateNamespace=true
+#           - ServerSideApply=true
