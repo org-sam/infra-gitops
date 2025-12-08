@@ -9,7 +9,7 @@ spec:
       elements:
       - name: dev-demo
         server: https://kubernetes.default.svc
-        vpc_id: vpc-PLACEHOLDER # TODO: Replace with actual VPC ID
+        vpc_id: vpc-02820cfe573497a95
         revision: 1.16.0
 
   template:
