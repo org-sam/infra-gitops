@@ -5,21 +5,22 @@ metadata:
   namespace: argocd
 spec:
   generators:
-    - clusters:
-        selector:
-          matchLabels:
-            keda: "true"
+  - list:
+      elements:
+      - name: dev-demo
+        server: https://kubernetes.default.svc
+        revision: 2.18.1
 
   template:
     metadata:
       name: 'keda-{{name}}'
     spec:
       project: default
-      
+
       source:
         repoURL: 'https://kedacore.github.io/charts'
         chart: keda
-        targetRevision: '2.18.1'
+        targetRevision: '{{revision}}'
         helm:
           valuesObject:
             resources:
