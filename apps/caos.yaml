@@ -13,7 +13,7 @@ spec:
             path: k8s/caos
   template:
       metadata:
-        name: "app-{{namespace}}-{{cluster}}"
+        name: "{{namespace}}-{{cluster}}"
       spec:
         project: default
         source:
