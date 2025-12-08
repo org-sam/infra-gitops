@@ -12,14 +12,15 @@ infra-gitops/
 │   ├── apps.yaml                  # Aponta para apps/
 │   └── infra-base.yaml            # Aponta para infra-base/
 ├── infra-base/                    # Componentes de infraestrutura
-│   ├── config/
-│   │   └── karpenter/             # CRDs do Karpenter (Helm chart)
-│   │       ├── Chart.yaml
-│   │       ├── default-ec2nodeclass.yaml
-│   │       └── nodepool.yaml
+│   ├── aws-load-balancer-controller.yaml # AppSet do AWS LBC
+│   ├── external-secrets.yaml      # AppSet do External Secrets Operator
+│   ├── external-secrets-config.yaml # AppSet da config do External Secrets
 │   ├── karpenter.yaml             # ApplicationSet do controller Karpenter
 │   ├── karpenter-config.yaml      # ApplicationSet da config do Karpenter
 │   └── keda.yaml                  # ApplicationSet do KEDA
+├── infra-config/                  # Charts locais e configurações
+│   ├── external-secrets/          # Chart local para ClusterSecretStore
+│   └── karpenter/                 # Chart local para NodePool/EC2NodeClass
 └── root-app/                      # Ponto de entrada
     └── app.yaml                   # Aponta para bootstrap/
 ```
@@ -36,12 +37,15 @@ graph TD
     C --> E[karpenter]
     C --> F[karpenter-config]
     C --> G[keda]
-    D --> H[caos]
+    C --> H[aws-load-balancer-controller]
+    C --> I[external-secrets]
+    C --> J[external-secrets-config]
+    D --> K[caos]
 ```
 
 1. **root-app**: Ponto de entrada que aponta para o diretório `bootstrap/`.
 2. **bootstrap/**: Contém as Applications que gerenciam `infra-base/` e `apps/`.
-3. **infra-base/**: Contém ApplicationSets para componentes de infraestrutura (Karpenter, KEDA).
+3. **infra-base/**: Contém ApplicationSets para componentes de infraestrutura.
 4. **apps/**: Contém ApplicationSets para aplicações de negócio.
 
 ## 🎯 Boas Práticas ArgoCD Implementadas
@@ -64,63 +68,30 @@ O [Karpenter](https://karpenter.sh/) é um provisionador de nós para Kubernetes
 
 **ApplicationSets:**
 - `karpenter.yaml`: Instala o controller do Karpenter via Helm chart OCI.
-- `karpenter-config.yaml`: Aplica as configurações (`NodePool` e `EC2NodeClass`).
+- `karpenter-config.yaml`: Aplica as configurações (`NodePool` e `EC2NodeClass`) a partir de `infra-config/karpenter`.
 
-**Sync Waves:**
-- Wave 0: Controller do Karpenter
-- Wave 1: Configuração (`NodePool` + `EC2NodeClass`)
+### AWS Load Balancer Controller
 
+O [AWS Load Balancer Controller](https://kubernetes-sigs.github.io/aws-load-balancer-controller/) gerencia ALBs e NLBs na AWS.
+
+**ApplicationSets:**
+- `aws-load-balancer-controller.yaml`: Instala o controller via Helm chart oficial.
+
+### External Secrets Operator
+
+O [External Secrets Operator](https://external-secrets.io/) sincroniza segredos de provedores externos (AWS Secrets Manager) para o Kubernetes.
+
+**ApplicationSets:**
+- `external-secrets.yaml`: Instala o Operator via Helm chart oficial.
+- `external-secrets-config.yaml`: Instala o `ClusterSecretStore` a partir de `infra-config/external-secrets`.
 
 ## 🔧 Como Adicionar um Novo Cluster
 
 ### Para Karpenter
+Edite `infra-base/karpenter.yaml` e `infra-base/karpenter-config.yaml` adicionando o novo cluster na lista de generators.
 
-1. Edite `infra-base/karpenter.yaml` e adicione um novo elemento no generator:
+### Para AWS Load Balancer Controller
+Edite `infra-base/aws-load-balancer-controller.yaml` e adicione o novo cluster com seu respectivo `vpc_id`.
 
-```yaml
-generators:
-- list:
-    elements:
-    - name: dev-demo
-      server: https://kubernetes.default.svc
-      role_arn: arn:aws:iam::ACCOUNT:role/KarpenterController-XXX
-      queue_name: Karpenter-dev-demo
-      revision: 1.8.2
-    - name: prod-cluster  # Novo cluster
-      server: https://ENDPOINT
-      role_arn: arn:aws:iam::ACCOUNT:role/KarpenterController-YYY
-      queue_name: Karpenter-prod-cluster
-      revision: 1.8.2
-```
-
-2. Edite `infra-base/karpenter-config.yaml` para adicionar a configuração do novo cluster.
-
-### Para KEDA
-
-1. Adicione o cluster no ArgoCD com a label `keda: "true"`:
-
-```bash
-argocd cluster add CLUSTER_NAME --label keda=true
-```
-
-## 📋 Pré-requisitos AWS para Karpenter
-
-Antes de implantar o Karpenter, certifique-se de ter:
-
-1. **IAM Role para o Controller**: Com permissões para EC2, SQS, etc.
-2. **IAM Role para os Nodes**: Com política `AmazonEKSWorkerNodePolicy`.
-3. **SQS Queue**: Para interrupção de instâncias Spot.
-4. **Tags nas Subnets e Security Groups**: `karpenter.sh/discovery: <cluster-name>`.
-
-## 🔄 Deploy Inicial
-
-1. Aplique a root-app:
-
-```bash
-kubectl apply -f root-app/app.yaml
-```
-
-2. O ArgoCD irá sincronizar automaticamente:
-   - `bootstrap/` → `infra-base/` e `apps/`
-   - `infra-base/` → Karpenter, KEDA, etc.
-   - `apps/` → Aplicações
+### Para External Secrets
+Edite `infra-base/external-secrets.yaml` e `infra-base/external-secrets-config.yaml` (especificando a `region` se necessário).
