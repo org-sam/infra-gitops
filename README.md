@@ -120,33 +120,13 @@ Antes de implantar o Karpenter, certifique-se de ter:
 
 ## 🔄 Deploy Inicial
 
-1. Instale o ArgoCD no cluster:
-
-```bash
-kubectl create namespace argocd
-kubectl apply -n argocd -f https://raw.githubusercontent.com/argoproj/argo-cd/stable/manifests/install.yaml
-```
-
-2. Aplique a root-app:
+1. Aplique a root-app:
 
 ```bash
 kubectl apply -f root-app/app.yaml
 ```
 
-3. O ArgoCD irá sincronizar automaticamente:
+2. O ArgoCD irá sincronizar automaticamente:
    - `bootstrap/` → `infra-base/` e `apps/`
    - `infra-base/` → Karpenter, KEDA, etc.
    - `apps/` → Aplicações
-
-## 📊 Monitoramento
-
-Acesse o ArgoCD UI para monitorar o status das applications:
-
-```bash
-kubectl port-forward svc/argocd-server -n argocd 8080:443
-```
-
-## 📝 Notas
-
-- Todas as applications usam `project: default`. Considere criar ArgoCD Projects dedicados para melhor RBAC.
-- Os ApplicationSets usam diferentes generators (`list` vs `clusters`). Escolha baseado no caso de uso.
