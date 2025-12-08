@@ -70,12 +70,6 @@ O [Karpenter](https://karpenter.sh/) é um provisionador de nós para Kubernetes
 - Wave 0: Controller do Karpenter
 - Wave 1: Configuração (`NodePool` + `EC2NodeClass`)
 
-### KEDA
-
-O [KEDA](https://keda.sh/) é um autoscaler baseado em eventos para Kubernetes.
-
-**ApplicationSet:**
-- `keda.yaml`: Instala o KEDA em clusters com label `keda: "true"`.
 
 ## 🔧 Como Adicionar um Novo Cluster
 
