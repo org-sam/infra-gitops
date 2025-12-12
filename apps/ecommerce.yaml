@@ -19,15 +19,21 @@ spec:
       destination:
         namespace: "{{namespace}}"
         server: "{{url}}"
+
       sources:
-        - repoURL: oci://registry-1.docker.io/saiwmon/generic-front
+        # Source 1: Chart OCI
+        - repoURL: registry-1.docker.io/saiwmon
+          chart: generic-front
           targetRevision: 1.0.0
           helm:
             valueFiles:
               - $values/apps/environments/{{environment}}/ecommerce-frontend/values.yaml
+
+        # Source 2: Values no Git
         - repoURL: https://github.com/org-sam/infra-gitops
           targetRevision: HEAD
           ref: values
+
       syncPolicy:
         automated:
           prune: true
