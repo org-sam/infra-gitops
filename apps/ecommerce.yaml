@@ -1,24 +1,25 @@
 apiVersion: argoproj.io/v1alpha1
 kind: ApplicationSet
 metadata:
-  name: caos-appset
+  name: ecommerce-appset
   namespace: argocd
 spec:
   generators:
     - list:
         elements:
-          - cluster: cluster-01
+          - cluster: cluster-dev
             url: https://kubernetes.default.svc
-            namespace: caos
-            path: k8s/caos
+            namespace: ecommerce-frontend
+            path: apps/environments/dev/ecommerce-frontend
+            environment: dev
   template:
       metadata:
-        name: "{{namespace}}-{{cluster}}"
+        name: "{{namespace}}-{{environment}}"
       spec:
         project: default
         source:
           path: "{{path}}"
-          repoURL: https://github.com/isamuelalmeida/applications-gitops-teste
+          repoURL: https://github.com/org-sam/infra-gitops
           targetRevision: HEAD
         destination:
           namespace: "{{namespace}}"
