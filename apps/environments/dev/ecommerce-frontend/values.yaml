@@ -1,0 +1,48 @@
+fullnameOverride: ecommerce-frontend
+
+replicaCount: 1
+
+image:
+  repository: saiwmon/ecommerce-frontend
+  tag: latest
+  pullPolicy: Always
+
+container:
+  name: ecommerce-frontend
+  port: 3000
+
+resources:
+  requests:
+    cpu: 500m
+    memory: 512Mi
+  limits:
+    cpu: 500m
+    memory: 512Mi
+
+service:
+  enabled: true
+  type: ClusterIP
+  port: 80
+  targetPort: 3000
+
+ingress:
+  enabled: false
+  className: alb
+
+  commonAnnotations:
+    alb.ingress.kubernetes.io/healthcheck-interval-seconds: "60"
+    alb.ingress.kubernetes.io/healthcheck-path: /
+    alb.ingress.kubernetes.io/listen-ports: '[{"HTTP": 80}]'
+    alb.ingress.kubernetes.io/scheme: internet-facing
+    alb.ingress.kubernetes.io/success-codes: "200"
+    alb.ingress.kubernetes.io/target-type: ip
+    kubernetes.io/ingress.class: alb
+
+  annotations:
+    alb.ingress.kubernetes.io/group.name: dev-eks
+
+  hosts:
+    - host: ecommerce.dev.platosedu.io
+      paths:
+        - path: /
+          pathType: Prefix
