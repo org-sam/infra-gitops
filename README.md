@@ -34,14 +34,15 @@ Este projeto segue o padrão **App of Apps** do ArgoCD:
 ```mermaid
 graph TD
     A[root-app] --> B[bootstrap/]
-    B --> C[infra-base]
-    B --> D[apps]
+    B --> C[infra-manager]
+    B --> D[apps-manager]
     C --> E[karpenter]
     C --> F[karpenter-config]
     C --> G[keda]
     C --> H[aws-load-balancer-controller]
     C --> I[external-secrets]
     C --> J[external-secrets-config]
+    D --> L[applications]
 ```
 
 1. **root-app**: Ponto de entrada que aponta para o diretório `bootstrap/`.
