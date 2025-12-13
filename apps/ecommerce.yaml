@@ -24,7 +24,7 @@ spec:
         # Source 1: Chart OCI
         - repoURL: registry-1.docker.io/saiwmon
           chart: generic-front
-          targetRevision: 1.0.0
+          targetRevision: 1.0.1
           helm:
             valueFiles:
               - $values/apps/environments/{{environment}}/ecommerce-frontend/values.yaml
