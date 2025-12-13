@@ -33,7 +33,7 @@ Este projeto segue o padrão **App of Apps** do ArgoCD:
 
 ```mermaid
 graph TD
-    A[root-app] --> B[bootstrap/]
+    A[root-app] --> B[bootstrap]
     B --> C[infra-manager]
     B --> D[apps-manager]
     C --> E[karpenter]
