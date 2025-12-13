@@ -6,23 +6,25 @@ Este repositório contém a configuração GitOps para gerenciar a infraestrutur
 
 ```
 infra-gitops/
-├── apps/                          # Deployments de aplicações
-│   └── caos.yaml                  # ApplicationSet para app caos
-├── bootstrap/                     # Applications de bootstrap (App of Apps)
-│   ├── apps.yaml                  # Aponta para apps/
-│   └── infra-base.yaml            # Aponta para infra-base/
-├── infra-base/                    # Componentes de infraestrutura
+├── apps/                                 # Values das aplicações
+├── bootstrap/                            # Applications e Projects
+│   ├── projects/                         # Projetcs do ArgoCD
+│   └────── hands-on.yaml                 # Project Hands-on para testes
+│   ├── management/                       # Applications de bootstrap (App of Apps)
+│   └────── apps-manager.yaml             # Aponta para apps/
+│   └────── infra-manager.yaml            # Aponta para infra-base/
+├── infra-base/                           # Componentes de infraestrutura
 │   ├── aws-load-balancer-controller.yaml # AppSet do AWS LBC
-│   ├── external-secrets.yaml      # AppSet do External Secrets Operator
-│   ├── external-secrets-config.yaml # AppSet da config do External Secrets
-│   ├── karpenter.yaml             # ApplicationSet do controller Karpenter
-│   ├── karpenter-config.yaml      # ApplicationSet da config do Karpenter
-│   └── keda.yaml                  # ApplicationSet do KEDA
-├── infra-config/                  # Charts locais e configurações
-│   ├── external-secrets/          # Chart local para ClusterSecretStore
-│   └── karpenter/                 # Chart local para NodePool/EC2NodeClass
-└── root-app/                      # Ponto de entrada
-    └── app.yaml                   # Aponta para bootstrap/
+│   ├── external-secrets.yaml             # AppSet do External Secrets Operator
+│   ├── external-secrets-config.yaml      # AppSet da config do External Secrets
+│   ├── karpenter.yaml                    # ApplicationSet do controller Karpenter
+│   ├── karpenter-config.yaml             # ApplicationSet da config do Karpenter
+│   └── keda.yaml                         # ApplicationSet do KEDA
+├── infra-config/                         # Charts locais e configurações
+│   ├── external-secrets/                 # Chart local para ClusterSecretStore
+│   └── karpenter/                        # Chart local para NodePool/EC2NodeClass
+└── root-app/                             # Ponto de entrada
+    └── app.yaml                          # Aponta para bootstrap/
 ```
 
 ## 🚀 Como Funciona
@@ -40,7 +42,6 @@ graph TD
     C --> H[aws-load-balancer-controller]
     C --> I[external-secrets]
     C --> J[external-secrets-config]
-    D --> K[caos]
 ```
 
 1. **root-app**: Ponto de entrada que aponta para o diretório `bootstrap/`.

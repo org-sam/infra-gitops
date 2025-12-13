@@ -1,16 +1,18 @@
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
-  name: apps
+  name: infra-base
   namespace: argocd
+  annotations:
+    argocd.argoproj.io/sync-wave: "0"
 spec:
-  project: default
+  project: hands-on
   source:
     repoURL: 'https://github.com/org-sam/infra-gitops.git'
     targetRevision: HEAD
-    path: apps
+    path: infra-base/keda-teste
     directory:
-      recurse: false
+      recurse: true
   destination:
     server: 'https://kubernetes.default.svc'
     namespace: argocd

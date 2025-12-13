@@ -9,6 +9,8 @@ spec:
     repoURL: 'https://github.com/org-sam/infra-gitops.git'
     targetRevision: HEAD
     path: bootstrap
+    directory:
+      recurse: true
   destination:
     server: 'https://kubernetes.default.svc'
     namespace: argocd
@@ -16,8 +18,8 @@ spec:
     automated:
       prune: true
       selfHeal: true
-  ignoreDifferences:
-  - group: argoproj.io
-    kind: Application
-    jsonPointers:
-    - /spec/source/directory/recurse
+  # ignoreDifferences:
+  # - group: argoproj.io
+  #   kind: Application
+  #   jsonPointers:
+  #   - /spec/source/directory/recurse
