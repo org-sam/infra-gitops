@@ -19,7 +19,7 @@ spec:
       annotations:
         argocd.argoproj.io/sync-wave: "0"
     spec:
-      project: default
+      project: hands-on
 
       source:
         repoURL: public.ecr.aws/karpenter

@@ -16,7 +16,7 @@ spec:
     metadata:
       name: "aws-load-balancer-controller-{{name}}"
     spec:
-      project: default
+      project: hands-on
 
       source:
         repoURL: https://aws.github.io/eks-charts

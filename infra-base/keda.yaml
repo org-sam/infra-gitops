@@ -15,7 +15,7 @@ spec:
     metadata:
       name: 'keda-{{name}}'
     spec:
-      project: default
+      project: hands-on
 
       source:
         repoURL: 'https://kedacore.github.io/charts'

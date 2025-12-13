@@ -15,7 +15,7 @@ spec:
     metadata:
       name: "{{namespace}}-{{environment}}"
     spec:
-      project: default
+      project: hands-on
       destination:
         namespace: "{{namespace}}"
         server: "{{url}}"
