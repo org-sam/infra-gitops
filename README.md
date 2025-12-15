@@ -48,7 +48,8 @@ graph TD
 1. **root-app**: Ponto de entrada que aponta para o diretório `bootstrap/`.
 2. **bootstrap/**: Contém as Applications que gerenciam `infra-base/` e `apps/`.
 3. **infra-base/**: Contém ApplicationSets para componentes de infraestrutura.
-4. **apps/**: Contém ApplicationSets para aplicações de negócio.
+4. **infra-config/**: Contém os Charts que são invocados pelos Applicationset de config na infra-base.
+5. **apps/**: Contém ApplicationSets para aplicações de negócio.
 
 ## 🎯 Boas Práticas ArgoCD Implementadas
 
