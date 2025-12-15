@@ -6,7 +6,7 @@ Este repositório contém a configuração GitOps para gerenciar a infraestrutur
 
 ```
 infra-gitops/
-├── apps/                                 # Values das aplicações
+├── apps/                                 # Applicationsets ["app-x/appset.yaml"] e subdiretórios ["app-x/values/dev.yaml"] com os Values das aplicações
 ├── bootstrap/                            # Applications e Projects
 │   ├── projects/                         # Projetcs do ArgoCD
 │   └────── hands-on.yaml                 # Project Hands-on para testes
