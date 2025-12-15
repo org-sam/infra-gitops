@@ -12,7 +12,7 @@ spec:
     targetRevision: HEAD
     path: infra-base/keda-teste
     directory:
-      recurse: true
+      recurse: false
   destination:
     server: 'https://kubernetes.default.svc'
     namespace: argocd
