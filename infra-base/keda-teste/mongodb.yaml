@@ -1,0 +1,57 @@
+apiVersion: argoproj.io/v1alpha1
+kind: ApplicationSet
+metadata:
+  name: mongodb
+  namespace: argocd
+spec:
+  generators:
+  - list:
+      elements:
+      - name: dev-demo
+        server: https://kubernetes.default.svc
+        revision: 18.1.17
+
+  template:
+    metadata:
+      name: 'mongodb-{{name}}'
+    spec:
+      project: hands-on
+
+      source:
+        repoURL: 'https://charts.bitnami.com/bitnami'
+        chart: mongodb
+        targetRevision: '{{revision}}'
+        helm:
+          valuesObject:
+            architecture: standalone
+            auth:
+              enabled: true
+              rootPassword: "senha123"
+              usernames:
+                - appuser
+              databases:
+                - appdb
+              passwords:
+                - "appsenha123"
+            resources:
+              limits:
+                cpu: 500m
+                memory: 512Mi
+              requests:
+                cpu: 100m
+                memory: 256Mi
+            persistence:
+              enabled: true
+              size: 8Gi
+
+      destination:
+        server: '{{server}}'
+        namespace: database
+
+      syncPolicy:
+        automated:
+          prune: true
+          selfHeal: true
+        syncOptions:
+          - CreateNamespace=true
+          - ServerSideApply=true
