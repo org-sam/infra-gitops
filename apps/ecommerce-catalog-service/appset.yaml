@@ -1,0 +1,42 @@
+apiVersion: argoproj.io/v1alpha1
+kind: ApplicationSet
+metadata:
+  name: ecommerce-appset
+  namespace: argocd
+spec:
+  generators:
+    - list:
+        elements:
+          - cluster: cluster-dev
+            url: https://kubernetes.default.svc
+            namespace: ecommerce-catalog-service
+            environment: dev
+  template:
+    metadata:
+      name: "{{namespace}}-{{environment}}"
+    spec:
+      project: hands-on
+      destination:
+        namespace: "{{namespace}}"
+        server: "{{url}}"
+
+      sources:
+        # Source 1: Chart OCI
+        - repoURL: registry-1.docker.io/saiwmon
+          chart: generic-front
+          targetRevision: 1.0.2
+          helm:
+            valueFiles:
+              - $values/apps/{{namespace}}/values/{{environment}}.yaml
+
+        # Source 2: Values no Git
+        - repoURL: https://github.com/org-sam/infra-gitops
+          targetRevision: HEAD
+          ref: values
+
+      syncPolicy:
+        automated:
+          prune: true
+          selfHeal: true
+        syncOptions:
+          - CreateNamespace=true

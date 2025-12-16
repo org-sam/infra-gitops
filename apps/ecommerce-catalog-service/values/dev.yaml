@@ -1,15 +1,13 @@
-fullnameOverride: ecommerce-frontend
-
-# replicaCount: 1
+fullnameOverride: ecommerce-catalog-service
 
 image:
-  repository: saiwmon/ecommerce-frontend
+  repository: saiwmon/ecommerce-catalog-service
   tag: latest
   pullPolicy: Always
 
 container:
-  name: ecommerce-frontend
-  port: 3000
+  name: ecommerce-catalog-service
+  port: 3001
 
 resources:
   requests:
@@ -23,7 +21,7 @@ service:
   enabled: true
   type: ClusterIP
   port: 80
-  targetPort: 3000
+  targetPort: 3001
 
 ingress:
   enabled: false
@@ -49,7 +47,7 @@ ingress:
 
 autoscaling:
   enabled: true
-  minReplicas: 2
+  minReplicas: 1
   maxReplicas: 5
   triggers:
     - type: cpu
