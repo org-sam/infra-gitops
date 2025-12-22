@@ -56,3 +56,7 @@ autoscaling:
       metricType: Utilization
       metadata:
         value: "70"
+
+env:
+  NEXT_PUBLIC_CATALOG_SERVICE_URL: "http://ecommerce-catalog-service.ecommerce-catalog-service"
+  NEXT_PUBLIC_ORDER_SERVICE_URL: "http://localhost:3002"
