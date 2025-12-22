@@ -23,7 +23,7 @@ spec:
       sources:
         # Source 1: Chart OCI
         - repoURL: registry-1.docker.io/saiwmon
-          chart: generic-front
+          chart: generic-js
           targetRevision: 1.0.2
           helm:
             valueFiles:
