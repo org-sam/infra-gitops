@@ -10,6 +10,7 @@ spec:
       - name: dev-demo
         server: https://kubernetes.default.svc
         node_role_name: eks-node-initial-eks-node-group-20251208131922385200000003
+        environment: dev
 
   template:
     metadata:
@@ -21,7 +22,7 @@ spec:
       source:
         repoURL: 'https://github.com/org-sam/infra-gitops.git'
         targetRevision: HEAD
-        path: infra-config/karpenter
+        path: infra-config/karpenter/{{environment}}
         
         helm:
           valuesObject:
