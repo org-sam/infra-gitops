@@ -54,3 +54,7 @@ autoscaling:
       metricType: Utilization
       metadata:
         value: "70"
+
+externalSecrets:
+  enabled: true
+  awsSecretName: "dev/e-commerce-catalog-service"
