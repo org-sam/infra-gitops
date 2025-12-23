@@ -35,4 +35,3 @@ spec:
   disruption:
     consolidateAfter: 30s
     consolidationPolicy: WhenEmpty
-    expireAfter: Never
