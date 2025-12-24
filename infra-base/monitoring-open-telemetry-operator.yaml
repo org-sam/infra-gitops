@@ -25,13 +25,13 @@ spec:
             manager:
               collectorImage:
                 repository: "otel/opentelemetry-collector-contrib"
-            
+
             admissionWebhooks:
               certManager:
                 enabled: false
               autoGenerateCert:
-                enabled: true
-                recreate: true
+                enabled: false
+                recreate: false
 
       destination:
         server: '{{server}}'
