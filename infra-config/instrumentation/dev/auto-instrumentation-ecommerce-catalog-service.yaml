@@ -1,8 +1,8 @@
 apiVersion: opentelemetry.io/v1alpha1
 kind: Instrumentation
 metadata:
-  name: monitoring-instrumentation
-  namespace: monitoring
+  name: ecommerce-catalog-service-dev
+  namespace: ecommerce-catalog-service
 spec:
   exporter:
     endpoint: http://otel-collector-collector.monitoring.svc:4317
