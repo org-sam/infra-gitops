@@ -30,7 +30,7 @@ spec:
               persistence:
                 enabled: true
                 size: 10Gi
-                storageClassName: standard
+                storageClassName: gp3
 
               sidecar:
                 dashboards:
@@ -44,7 +44,7 @@ spec:
                 storageSpec:
                   volumeClaimTemplate:
                     spec:
-                      storageClassName: standard
+                      storageClassName: gp3
                       accessModes: ["ReadWriteOnce"]
                       resources:
                         requests:
