@@ -3,7 +3,7 @@ fullnameOverride: nodejs-demo
 # replicaCount: 1
 
 image:
-  repository: luksa/kubia:latest
+  repository: luksa/kubia
   tag: latest
   pullPolicy: Always
 
