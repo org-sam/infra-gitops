@@ -27,6 +27,8 @@ spec:
         targetRevision: "{{revision}}"
         helm:
           valuesObject:
+            replicas: 1
+            
             settings:
               clusterName: '{{name}}'
               clusterEndpoint: '{{server}}'
