@@ -9,6 +9,7 @@ spec:
       elements:
       - name: dev-demo
         server: https://kubernetes.default.svc
+        api_endpoint: https://XXXXXXXXXXXXXXXXXXXX.gr7.us-east-2.eks.amazonaws.com
         role_arn: arn:aws:iam::732263836773:role/KarpenterController-2025122316421452260000001a
         queue_name: Karpenter-dev-demo
         revision: 1.8.2
@@ -28,10 +29,10 @@ spec:
         helm:
           valuesObject:
             replicas: 1
-            
+
             settings:
               clusterName: '{{name}}'
-              clusterEndpoint: '{{server}}'
+              clusterEndpoint: '{{api_endpoint}}'
               interruptionQueue: '{{queue_name}}'
 
             serviceAccount:
