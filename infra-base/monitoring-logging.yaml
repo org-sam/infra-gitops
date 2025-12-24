@@ -1,0 +1,35 @@
+apiVersion: argoproj.io/v1alpha1
+kind: ApplicationSet
+metadata:
+  name: loki-stack
+  namespace: argocd
+spec:
+  generators:
+  - list:
+      elements:
+      - name: dev-demo
+        server: https://kubernetes.default.svc
+        revision: 2.10.3
+
+  template:
+    metadata:
+      name: 'monitoring-logging-{{name}}'
+    spec:
+      project: hands-on
+
+      source:
+        repoURL: 'https://grafana.github.io/helm-charts'
+        chart: loki-stack
+        targetRevision: '{{revision}}'
+
+      destination:
+        server: '{{server}}'
+        namespace: monitoring 
+
+      syncPolicy:
+        automated:
+          prune: true
+          selfHeal: true
+        syncOptions:
+          - CreateNamespace=true
+          - ServerSideApply=true
