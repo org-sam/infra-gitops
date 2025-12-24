@@ -9,7 +9,7 @@ spec:
       elements:
       - name: dev-demo
         server: https://kubernetes.default.svc
-        role_arn: arn:aws:iam::732263836773:role/eks-node-initial-eks-node-group-20251223162739333500000002
+        role_arn: arn:aws:iam::732263836773:role/KarpenterController-2025122316421452260000001a
         queue_name: Karpenter-dev-demo
         revision: 1.8.2
 
