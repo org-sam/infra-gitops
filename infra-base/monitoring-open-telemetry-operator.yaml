@@ -1,0 +1,45 @@
+apiVersion: argoproj.io/v1alpha1
+kind: ApplicationSet
+metadata:
+  name: monitoring-otel-operator
+  namespace: argocd
+spec:
+  generators:
+  - list:
+      elements:
+      - name: dev-demo
+        server: https://kubernetes.default.svc
+        revision: 0.102.0
+
+  template:
+    metadata:
+      name: 'monitoring-otel-operator-{{name}}'
+    spec:
+      project: hands-on
+      source:
+        repoURL: 'https://open-telemetry.github.io/opentelemetry-helm-charts'
+        chart: opentelemetry-operator
+        targetRevision: '{{revision}}'
+        helm:
+          valuesObject:
+            manager:
+              collectorImage:
+                repository: "otel/opentelemetry-collector-contrib"
+            
+            admissionWebhooks:
+              certManager:
+                enabled: false
+              autoGenerateCert:
+                enabled: true
+                recreate: true
+
+      destination:
+        server: '{{server}}'
+        namespace: monitoring
+      syncPolicy:
+        automated:
+          prune: true
+          selfHeal: true
+        syncOptions:
+          - CreateNamespace=true
+          - ServerSideApply=true
