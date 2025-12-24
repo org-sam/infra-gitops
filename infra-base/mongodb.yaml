@@ -42,7 +42,7 @@ spec:
                 memory: 256Mi
             persistence:
               enabled: true
-              size: 8Gi
+              size: 5Gi
 
       destination:
         server: '{{server}}'

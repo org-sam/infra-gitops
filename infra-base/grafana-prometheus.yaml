@@ -29,13 +29,7 @@ spec:
 
               persistence:
                 enabled: true
-                size: 10Gi
-                storageClassName: gp3
-
-              sidecar:
-                dashboards:
-                  enabled: true
-                  label: grafana_dashboard
+                size: 5Gi
             
             prometheus:
               enabled: true
@@ -44,11 +38,10 @@ spec:
                 storageSpec:
                   volumeClaimTemplate:
                     spec:
-                      storageClassName: gp3
                       accessModes: ["ReadWriteOnce"]
                       resources:
                         requests:
-                          storage: 50Gi
+                          storage: 10Gi
 
                 resources:
                   requests:
