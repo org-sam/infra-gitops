@@ -9,7 +9,7 @@ spec:
       elements:
       - name: dev-demo
         server: https://kubernetes.default.svc
-        revision: 6.6.3
+        revision: 6.49.0
 
   template:
     metadata:
@@ -39,13 +39,13 @@ spec:
                     index:
                       prefix: index_
                       period: 24h
-            
+
             singleBinary:
               replicas: 1
               persistence:
                 enabled: true
                 size: 10Gi
-                storageClassName: gp3
+                # storageClassName: gp3
             
             gateway:
               enabled: true

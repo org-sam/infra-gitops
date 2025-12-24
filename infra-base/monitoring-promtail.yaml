@@ -9,7 +9,7 @@ spec:
       elements:
       - name: dev-demo
         server: https://kubernetes.default.svc
-        revision: 6.15.3
+        revision: 6.17.1
 
   template:
     metadata:
