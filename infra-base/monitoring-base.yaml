@@ -34,9 +34,9 @@ spec:
             additionalDataSources:
               - name: Loki
                 type: loki
-                url: http://monitoring-logging-dev-demo:3100 
+                url: http://monitoring-logging-dev-demo-loki:3100 
                 access: proxy
-                isDefault: true
+                isDefault: false
                 jsonData:
                   maxLines: 1000
 
