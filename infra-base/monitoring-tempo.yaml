@@ -16,6 +16,12 @@ spec:
       name: 'monitoring-tempo-{{name}}'
     spec:
       project: hands-on
+      ignoreDifferences:
+      - group: apps
+        kind: StatefulSet
+        jsonPointers:
+        - /spec/volumeClaimTemplates
+        
       source:
         repoURL: 'https://grafana.github.io/helm-charts'
         chart: tempo

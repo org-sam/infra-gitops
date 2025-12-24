@@ -45,7 +45,7 @@ spec:
                 - name: Tempo
                   type: tempo
                   uid: tempo
-                  url: http://monitoring-tempo-dev-demo.monitoring.svc:3100
+                  url: http://monitoring-tempo-dev-demo.monitoring.svc:3200
                   access: proxy
                   isDefault: false
                   jsonData:
