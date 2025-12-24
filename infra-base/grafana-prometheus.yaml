@@ -1,0 +1,77 @@
+apiVersion: argoproj.io/v1alpha1
+kind: ApplicationSet
+metadata:
+  name: kube-prometheus-stack
+  namespace: argocd
+spec:
+  generators:
+  - list:
+      elements:
+      - name: dev-demo
+        server: https://kubernetes.default.svc
+        revision: 80.6.0
+
+  template:
+    metadata:
+      name: 'monitoring-{{name}}'
+    spec:
+      project: hands-on
+
+      source:
+        repoURL: 'https://prometheus-community.github.io/helm-charts'
+        chart: kube-prometheus-stack
+        targetRevision: '{{revision}}'
+        helm:
+          valuesObject:
+            grafana:
+              enabled: true
+              adminPassword: "admin"
+
+              persistence:
+                enabled: true
+                size: 10Gi
+                storageClassName: standard
+
+              sidecar:
+                dashboards:
+                  enabled: true
+                  label: grafana_dashboard
+            
+            prometheus:
+              enabled: true
+              prometheusSpec:
+                retention: 10d
+                storageSpec:
+                  volumeClaimTemplate:
+                    spec:
+                      storageClassName: standard
+                      accessModes: ["ReadWriteOnce"]
+                      resources:
+                        requests:
+                          storage: 50Gi
+
+                resources:
+                  requests:
+                    memory: 400Mi
+                  limits:
+                    memory: 2Gi
+
+            alertmanager:
+              enabled: false
+
+            nodeExporter:
+              enabled: true
+            kubeStateMetrics:
+              enabled: true
+
+      destination:
+        server: '{{server}}'
+        namespace: monitoring
+
+      syncPolicy:
+        automated:
+          prune: true
+          selfHeal: true
+        syncOptions:
+          - CreateNamespace=true
+          - ServerSideApply=true
