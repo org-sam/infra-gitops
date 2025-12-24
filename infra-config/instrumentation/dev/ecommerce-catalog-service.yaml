@@ -5,8 +5,8 @@ metadata:
   namespace: ecommerce-catalog-service
 spec:
   exporter:
-    # endpoint: http://otel-collector.monitoring.svc:4317
-    endpoint: monitoring-tempo-dev-demo.monitoring.svc:4317
+    endpoint: http://otel-collector.monitoring.svc:4317
+    # endpoint: monitoring-tempo-dev-demo.monitoring.svc:4317
   
   propagators:
     - tracecontext
