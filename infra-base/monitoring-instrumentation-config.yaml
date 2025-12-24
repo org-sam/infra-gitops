@@ -25,11 +25,8 @@ spec:
 
       destination:
         server: "{{server}}"
-        namespace: monitoring
 
       syncPolicy:
         automated:
           prune: true
           selfHeal: true
-        syncOptions:
-          - CreateNamespace=true

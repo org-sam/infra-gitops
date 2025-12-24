@@ -1,7 +1,7 @@
 apiVersion: opentelemetry.io/v1alpha1
 kind: Instrumentation
 metadata:
-  name: ecommerce-catalog-service-dev
+  name: ecommerce-catalog-service
   namespace: ecommerce-catalog-service
 spec:
   exporter:
