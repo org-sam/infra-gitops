@@ -1,0 +1,29 @@
+fullnameOverride: nodejs-demo
+
+# replicaCount: 1
+
+image:
+  repository: luksa/kubia:latest
+  tag: latest
+  pullPolicy: Always
+
+container:
+  name: nodejs-demo
+  port: 8080
+
+resources:
+  requests:
+    cpu: 100m
+    memory: 100Mi
+  limits:
+    cpu: 500m
+    memory: 512Mi
+
+service:
+  enabled: true
+  type: ClusterIP
+  port: 80
+  targetPort: 8080
+
+env:
+  OTEL_SERVICE_NAME: "app-teste-nodejs"

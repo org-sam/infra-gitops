@@ -30,8 +30,8 @@ spec:
               certManager:
                 enabled: false
               autoGenerateCert:
-                enabled: false
-                recreate: false
+                enabled: true
+                recreate: true
 
       destination:
         server: '{{server}}'
