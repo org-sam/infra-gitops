@@ -5,7 +5,7 @@ metadata:
   namespace: ecommerce-frontend
 spec:
   exporter:
-    endpoint: http://otel-collector-collector.monitoring.svc:4317
+    endpoint: http://otel-collector.monitoring.svc:4317
   
   propagators:
     - tracecontext
