@@ -37,6 +37,22 @@ spec:
                   isDefault: false
                   jsonData:
                     maxLines: 1000
+                    derivedFields:
+                    - datasourceUid: tempo
+                      matcherRegex: "traceID=(\\w+)"
+                      name: TraceID
+                      url: "$${__value.raw}"
+                - name: Tempo
+                  type: tempo
+                  uid: tempo
+                  url: http://monitoring-tempo-dev-demo.monitoring.svc:3100
+                  access: proxy
+                  isDefault: false
+                  jsonData:
+                    nodeGraph:
+                      enabled: true
+                    lokiSearch:
+                      datasourceUid: Loki
 
             prometheus:
               enabled: true
