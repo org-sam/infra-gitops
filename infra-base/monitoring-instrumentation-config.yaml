@@ -1,0 +1,35 @@
+apiVersion: argoproj.io/v1alpha1
+kind: ApplicationSet
+metadata:
+  name: monitoring-instrumentation-config
+  namespace: argocd
+spec:
+  generators:
+  - list:
+      elements:
+      - name: dev-demo
+        server: https://kubernetes.default.svc
+        environment: dev
+
+  template:
+    metadata:
+      name: "monitoring-instrumentation-config-{{name}}"
+      annotations:
+        argocd.argoproj.io/sync-wave: "1"
+    spec:
+      project: hands-on
+      source:
+        repoURL: 'https://github.com/org-sam/infra-gitops.git'
+        targetRevision: HEAD
+        path: infra-config/instrumentation/{{environment}}        
+
+      destination:
+        server: "{{server}}"
+        namespace: monitoring
+
+      syncPolicy:
+        automated:
+          prune: true
+          selfHeal: true
+        syncOptions:
+          - CreateNamespace=true

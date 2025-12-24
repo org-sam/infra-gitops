@@ -1,0 +1,19 @@
+apiVersion: opentelemetry.io/v1alpha1
+kind: Instrumentation
+metadata:
+  name: monitoring-instrumentation
+  namespace: monitoring
+spec:
+  exporter:
+    endpoint: http://otel-collector-collector.monitoring.svc:4317
+  
+  propagators:
+    - tracecontext
+    - baggage
+  
+  sampler:
+    type: parentbased_traceidratio
+    argument: "1.0"
+
+  nodejs:
+    image: ghcr.io/open-telemetry/opentelemetry-operator/autoinstrumentation-nodejs:latest
