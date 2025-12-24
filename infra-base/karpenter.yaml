@@ -35,8 +35,6 @@ spec:
             serviceAccount:
               create: true
               name: karpenter
-              annotations:
-                eks.amazonaws.com/role-arn: '{{role_arn}}'
 
             controller:
               resources:
