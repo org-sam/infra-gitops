@@ -9,7 +9,7 @@ spec:
       elements:
       - name: dev-demo
         server: https://kubernetes.default.svc
-        revision: 0.142.1
+        revision: 0.142.0
 
   template:
     metadata:
@@ -23,6 +23,9 @@ spec:
         helm:
           valuesObject:
             mode: deployment
+            image:
+              repository: "otel/opentelemetry-collector-contrib"
+              tag: "0.142.0"
 
             config:
               receivers:
