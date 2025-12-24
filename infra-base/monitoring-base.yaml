@@ -34,11 +34,11 @@ spec:
             additionalDataSources:
                 - name: Loki
                   type: loki
-                  url: http://monitoring-logging-dev-demo-loki.monitoring.svc:3100
+                  url: http://monitoring-loki-dev-demo-gateway.monitoring.svc:80
                   access: proxy
                   isDefault: false
                   jsonData:
-                    maxLines: 1000
+                    maxLines: 100
 
             prometheus:
               enabled: true
