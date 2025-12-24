@@ -26,10 +26,8 @@ spec:
             grafana:
               enabled: true
               adminPassword: "admin"
-
-              persistence:
-                enabled: true
-                size: 5Gi
+              forceDeployDatasources: true
+              forceDeployDashboards: true
 
             additionalDataSources:
                 - name: Loki
