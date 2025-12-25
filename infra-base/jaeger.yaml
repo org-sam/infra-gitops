@@ -1,0 +1,65 @@
+apiVersion: argoproj.io/v1alpha1
+kind: ApplicationSet
+metadata:
+  name: jaeger
+  namespace: argocd
+spec:
+  generators:
+  - list:
+      elements:
+      - name: dev-demo
+        server: https://kubernetes.default.svc
+        revision: 0.71.0 
+
+  template:
+    metadata:
+      name: 'jaeger-{{name}}'
+    spec:
+      project: hands-on
+
+      source:
+        # Utilizando o repositório oficial do Jaeger Kubernetes
+        repoURL: 'https://jaegertracing.github.io/helm-charts'
+        chart: jaeger
+        targetRevision: '{{revision}}'
+        helm:
+          valuesObject:
+            allInOne:
+              enabled: true
+            
+            storage:
+              type: memory
+
+            agent:
+              enabled: true
+
+            collector:
+              enabled: true
+              service:
+                otlp:
+                  enabled: true
+
+            query:
+              enabled: true
+              service:
+                type: ClusterIP
+
+            resources:
+              limits:
+                cpu: 500m
+                memory: 512Mi
+              requests:
+                cpu: 100m
+                memory: 256Mi
+
+      destination:
+        server: '{{server}}'
+        namespace: jaeger
+
+      syncPolicy:
+        automated:
+          prune: true
+          selfHeal: true
+        syncOptions:
+          - CreateNamespace=true
+          - ServerSideApply=true
