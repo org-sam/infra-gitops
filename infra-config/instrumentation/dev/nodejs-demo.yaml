@@ -5,8 +5,8 @@ metadata:
   namespace: nodejs-demo
 spec:
   exporter:
-    endpoint: endpoint: http://jaeger-dev-demo-collector.jaeger.svc:4317
-  
+    endpoint: http://jaeger-dev-demo.jaeger.svc:4317
+
   propagators:
     - tracecontext
     - baggage
@@ -17,8 +17,3 @@ spec:
 
   nodejs:
     image: ghcr.io/open-telemetry/opentelemetry-operator/autoinstrumentation-nodejs:0.67.2
-    env:
-      - name: OTEL_LOG_LEVEL
-        value: "info"
-      - name: OTEL_EXPORTER_OTLP_PROTOCOL
-        value: "grpc"
