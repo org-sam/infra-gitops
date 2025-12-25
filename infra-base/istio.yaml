@@ -36,8 +36,6 @@ spec:
                 clusterName: '{{name}}'
             pilot:
               autoscaleEnabled: false # For demo/small env
-              env:
-                VALIDATING_WEBHOOK_FAILURE_POLICY: Ignore
             meshConfig:
               accessLogFile: /dev/stdout
               extensionProviders:
@@ -50,6 +48,11 @@ spec:
         automated:
           prune: true
           selfHeal: true
+        ignoreDifferences:
+          - group: admissionregistration.k8s.io
+            kind: ValidatingWebhookConfiguration
+            jsonPointers:
+              - /webhooks/0/failurePolicy
         syncOptions:
           - CreateNamespace=true
           - ServerSideApply=true
