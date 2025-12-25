@@ -33,6 +33,8 @@ spec:
           valuesObject:
             service:
               type: LoadBalancer # Or NodePort/ClusterIP depending on env, but for demo usually LB is expected if on cloud
+            image: istio/proxyv2
+            tag: 1.28.2
       destination:
         server: '{{server}}'
         namespace: istio-system
