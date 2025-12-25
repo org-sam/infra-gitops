@@ -1,100 +1,55 @@
 # Infra GitOps
 
-Este repositório contém a configuração GitOps para gerenciar a infraestrutura Kubernetes usando ArgoCD.
+Este repositório gerencia a infraestrutura Kubernetes e aplicações através do ArgoCD, seguindo o padrão **App of Apps**.
 
 ## 📁 Estrutura do Projeto
 
-```
+```text
 infra-gitops/
-├── apps/                                 # Applicationsets ["app-x/appset.yaml"] e subdiretórios ["app-x/values/dev.yaml"] com os Values das aplicações
-├── bootstrap/                            # Applications e Projects
-│   ├── projects/                         # Projetcs do ArgoCD
-│   └────── hands-on.yaml                 # Project Hands-on para testes
-│   ├── management/                       # Applications de bootstrap (App of Apps)
-│   └────── apps-manager.yaml             # Aponta para apps/
-│   └────── infra-manager.yaml            # Aponta para infra-base/
-├── infra-base/                           # Componentes de infraestrutura
-│   ├── aws-load-balancer-controller.yaml # AppSet do AWS LBC
-│   ├── external-secrets.yaml             # AppSet do External Secrets Operator
-│   ├── external-secrets-config.yaml      # AppSet da config do External Secrets
-│   ├── karpenter.yaml                    # ApplicationSet do controller Karpenter
-│   ├── karpenter-config.yaml             # ApplicationSet da config do Karpenter
-│   └── keda.yaml                         # ApplicationSet do KEDA
-├── infra-config/                         # Charts locais e configurações
-│   ├── external-secrets/                 # Chart local para ClusterSecretStore
-│   └── karpenter/                        # Chart local para NodePool/EC2NodeClass
-└── root-app/                             # Ponto de entrada
-    └── app.yaml                          # Aponta para bootstrap/
+├── apps/           # Configurações e valores das aplicações de negócio
+├── bootstrap/      # Projetos e Applications de gerenciamento (App of Apps)
+├── infra-base/     # Manifestos (ApplicationSets) dos componentes de infraestrutura
+├── infra-config/   # Helm Charts locais para configurações customizadas
+└── root-app/       # Ponto de entrada que inicializa todo o ecossistema
 ```
 
-## 🚀 Como Funciona
-
-Este projeto segue o padrão **App of Apps** do ArgoCD:
+## 🚀 Fluxo de Deployment
 
 ```mermaid
 graph TD
     A[root-app] --> B[bootstrap]
     B --> C[infra-manager]
     B --> D[apps-manager]
-    C --> E[karpenter]
-    C --> F[karpenter-config]
-    C --> G[keda]
-    C --> H[aws-load-balancer-controller]
-    C --> I[external-secrets]
-    C --> J[external-secrets-config]
-    D --> L[applications]
+    C --> E[Infraestrutura Core]
+    C --> F[Observabilidade]
+    C --> G[Databases]
+    D --> H[Aplicações]
+
+    subgraph "Infraestrutura Core"
+    E1[Karpenter] & E2[KEDA] & E3[ALB Controller] & E4[External Secrets]
+    end
+
+    subgraph "Observabilidade"
+    F1[LGTM Stack] & F2[OpenTelemetry]
+    end
 ```
 
-1. **root-app**: Ponto de entrada que aponta para o diretório `bootstrap/`.
-2. **bootstrap/**: Contém as Applications que gerenciam `infra-base/` e `apps/`.
-3. **infra-base/**: Contém ApplicationSets para componentes de infraestrutura.
-4. **infra-config/**: Contém os Charts que são invocados pelos Applicationset de config na infra-base.
-5. **apps/**: Contém ApplicationSets para aplicações de negócio.
+## 📦 Componentes de Infraestrutura
 
-## 🎯 Boas Práticas ArgoCD Implementadas
+Os componentes estão organizados por categorias funcionais no diretório `infra-base/`:
 
-| Prática | Status | Descrição |
-|---------|--------|-----------|
-| App of Apps | ✅ | Estrutura hierárquica para gerenciar múltiplas applications |
-| ApplicationSets | ✅ | Deployments multi-cluster/ambiente |
-| Sync Waves | ✅ | Ordenação de deployments (controller antes da config) |
-| Automated Sync | ✅ | `prune: true` e `selfHeal: true` |
-| CreateNamespace | ✅ | Criação automática de namespaces |
-| ServerSideApply | ✅ | Para CRDs e recursos complexos |
-| Separação de Concerns | ✅ | Infraestrutura separada de aplicações |
+- **Compute & Scaling**: [Karpenter](https://karpenter.sh/) para auto-scaling de nós e [KEDA](https://keda.sh/) para auto-scaling baseado em eventos.
+- **Networking**: [AWS Load Balancer Controller](https://kubernetes-sigs.github.io/aws-load-balancer-controller/) para gerenciamento de ALBs e NLBs.
+- **Security**: [External Secrets Operator](https://external-secrets.io/) para integração com AWS Secrets Manager.
+- **Database**: Gerenciamento de instâncias [MongoDB](https://www.mongodb.com/) via Helm.
+- **Observability**: Stack completa composta por **Grafana, Prometheus, Loki e Tempo** (LGTM), além do **OpenTelemetry Operator/Collector** para instrumentação e coleta de telemetria.
 
-## 📦 Componentes
+## 🔧 Manutenção e Expansão
 
-### Karpenter
+### Adicionar Novos Ambientes ou Clusters
+Para adicionar um novo cluster ou ambiente, localize o `ApplicationSet` do componente desejado em `infra-base/` e atualize a lista de `generators`.
 
-O [Karpenter](https://karpenter.sh/) é um provisionador de nós para Kubernetes que automatiza o scaling.
-
-**ApplicationSets:**
-- `karpenter.yaml`: Instala o controller do Karpenter via Helm chart OCI.
-- `karpenter-config.yaml`: Aplica as configurações (`NodePool` e `EC2NodeClass`) a partir de `infra-config/karpenter`.
-
-### AWS Load Balancer Controller
-
-O [AWS Load Balancer Controller](https://kubernetes-sigs.github.io/aws-load-balancer-controller/) gerencia ALBs e NLBs na AWS.
-
-**ApplicationSets:**
-- `aws-load-balancer-controller.yaml`: Instala o controller via Helm chart oficial.
-
-### External Secrets Operator
-
-O [External Secrets Operator](https://external-secrets.io/) sincroniza segredos de provedores externos (AWS Secrets Manager) para o Kubernetes.
-
-**ApplicationSets:**
-- `external-secrets.yaml`: Instala o Operator via Helm chart oficial.
-- `external-secrets-config.yaml`: Instala o `ClusterSecretStore` a partir de `infra-config/external-secrets`.
-
-## 🔧 Como Adicionar um Novo Cluster
-
-### Para Karpenter
-Edite `infra-base/karpenter.yaml` e `infra-base/karpenter-config.yaml` adicionando o novo cluster na lista de generators.
-
-### Para AWS Load Balancer Controller
-Edite `infra-base/aws-load-balancer-controller.yaml` e adicione o novo cluster com seu respectivo `vpc_id`.
-
-### Para External Secrets
-Edite `infra-base/external-secrets.yaml` e `infra-base/external-secrets-config.yaml` (especificando a `region` se necessário).
+### Boas Práticas Implementadas
+- **Sync Waves**: Ordenação automática (ex: controllers antes de configurações).
+- **Auto-healing**: `prune` e `selfHeal` habilitados para evitar derivação de configuração.
+- **Server-side Apply**: Utilizado para gerenciar CRDs e recursos complexos.
