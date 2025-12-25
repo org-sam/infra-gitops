@@ -16,6 +16,16 @@ spec:
       name: 'monitoring-otel-opr-{{name}}'
     spec:
       project: hands-on
+      ignoreDifferences:
+        - group: admissionregistration.k8s.io
+          kind: MutatingWebhookConfiguration
+          jsonPointers:
+            - /webhooks/0/clientConfig/caBundle
+        - group: admissionregistration.k8s.io
+          kind: ValidatingWebhookConfiguration
+          jsonPointers:
+            - /webhooks/0/clientConfig/caBundle
+
       source:
         repoURL: 'https://open-telemetry.github.io/opentelemetry-helm-charts'
         chart: opentelemetry-operator
