@@ -9,7 +9,7 @@ spec:
       elements:
       - name: dev-demo
         server: https://kubernetes.default.svc
-        revision: 0.71.0 
+        revision: 4.2.0 
 
   template:
     metadata:
@@ -24,25 +24,18 @@ spec:
         targetRevision: '{{revision}}'
         helm:
           valuesObject:
+            provisionDataStore:
+              cassandra: false
             allInOne:
               enabled: true
-            
             storage:
               type: memory
-
             agent:
-              enabled: true
-
+              enabled: false
             collector:
-              enabled: true
-              service:
-                otlp:
-                  enabled: true
-
+              enabled: false
             query:
-              enabled: true
-              service:
-                type: ClusterIP
+              enabled: false
 
             resources:
               limits:
