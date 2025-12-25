@@ -62,5 +62,6 @@ env:
   NEXT_PUBLIC_ORDER_SERVICE_URL: "http://localhost:3002"
   OTEL_SERVICE_NAME: "ecommerce-frontend"
 
-podAnnotations:
-  instrumentation.opentelemetry.io/inject-nodejs: "true"
+opentelemetry:
+  enabled: true
+  type: nodejs

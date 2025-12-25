@@ -62,5 +62,6 @@ externalSecrets:
 env:
   OTEL_SERVICE_NAME: "ecommerce-catalog-service"
 
-podAnnotations:
-  instrumentation.opentelemetry.io/inject-nodejs: "true"
+opentelemetry:
+  enabled: true
+  type: nodejs
