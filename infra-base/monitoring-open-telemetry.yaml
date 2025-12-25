@@ -22,95 +22,60 @@ spec:
         targetRevision: '{{revision}}'
         helm:
           valuesObject:
-            # mode: deployment
-            # fullnameOverride: "otel-collector"
-            
-            # image:
-            #   repository: "otel/opentelemetry-collector-contrib"
-            #   tag: "0.104.0"
+            mode: deployment
+            fullnameOverride: "otel-collector"
 
-            # config:
-            #   receivers:
-            #     otlp:
-            #       protocols:
-            #         grpc:
-            #           endpoint: 0.0.0.0:4317
-            #         http:
-            #           endpoint: 0.0.0.0:4318
+            image:
+              repository: "otel/opentelemetry-collector-contrib"
+              tag: "0.104.0"
 
-            #   processors:
-            #     batch:
-            #       timeout: 1s
-            #       send_batch_size: 1024
-            #     k8sattributes:
-            #       auth_type: "serviceAccount"
-            #       passthrough: false
-            #       extract:
-            #         metadata:
-            #           - k8s.pod.name
-            #           - k8s.pod.uid
-            #           - k8s.deployment.name
-            #           - k8s.namespace.name
-
-            #   exporters:
-            #     otlp:
-            #       endpoint: "monitoring-tempo-dev-demo.monitoring.svc:4317"
-            #       tls:
-            #         insecure: true
-            #     debug:
-            #       verbosity: detailed
-
-            #   service:
-            #     pipelines:
-            #       traces:
-            #         receivers: [otlp]
-            #         processors: [k8sattributes, batch]
-            #         exporters: [otlp, debug]
-
-            # clusterRole:
-            #   create: true
-            #   rules:
-            #   - apiGroups: [""]
-            #     resources: ["pods", "namespaces", "nodes"]
-            #     verbs: ["get", "watch", "list"]
-            #   - apiGroups: ["apps"]
-            #     resources: ["replicasets", "deployments", "statefulsets"]
-            #     verbs: ["get", "watch", "list"]
-
-            mode: "deployment"
             config:
+              receivers:
+                otlp:
+                  protocols:
+                    grpc:
+                      endpoint: 0.0.0.0:4317
+                    http:
+                      endpoint: 0.0.0.0:4318
+
+              processors:
+                batch:
+                  timeout: 1s
+                  send_batch_size: 1024
+                k8sattributes:
+                  auth_type: "serviceAccount"
+                  passthrough: false
+                  extract:
+                    metadata:
+                      - k8s.pod.name
+                      - k8s.pod.uid
+                      - k8s.deployment.name
+                      - k8s.namespace.name
+
               exporters:
                 otlp:
-                  endpoint: jaeger-dev-demo.monitoring:4317
+                  endpoint: "monitoring-tempo-dev-demo.monitoring.svc:4317"
                   tls:
                     insecure: true
-              extensions:
-                health_check:
-                  endpoint: ${env:MY_POD_IP}:13133
-              receivers:
-                jaeger:
-                  protocols:
-                    grpc:
-                      endpoint: ${env:MY_POD_IP}:14250
-                    thrift_http:
-                      endpoint: ${env:MY_POD_IP}:14268
-                    thrift_compact:
-                      endpoint: ${env:MY_POD_IP}:6831
-                otlp:
-                  protocols:
-                    grpc:
-                      endpoint: ${env:MY_POD_IP}:4317
-                    http:
-                      endpoint: ${env:MY_POD_IP}:4318
+                debug:
+                  verbosity: detailed
+
               service:
                 pipelines:
                   traces:
-                    exporters:
-                      - otlp
-                    processors:
-                      - batch
-                    receivers:
-                      - otlp
+                    receivers: [otlp]
+                    processors: [k8sattributes, batch]
+                    exporters: [otlp, debug]
+
+            clusterRole:
+              create: true
+              rules:
+              - apiGroups: [""]
+                resources: ["pods", "namespaces", "nodes"]
+                verbs: ["get", "watch", "list"]
+              - apiGroups: ["apps"]
+                resources: ["replicasets", "deployments", "statefulsets"]
+                verbs: ["get", "watch", "list"]
 
       destination:
         server: '{{server}}'

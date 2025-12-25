@@ -5,8 +5,8 @@ metadata:
   namespace: nodejs-demo
 spec:
   exporter:
-    endpoint: http://jaeger-dev-demo.jaeger.svc:4317
-
+    endpoint: http://otel-collector.monitoring.svc:4317
+  
   propagators:
     - tracecontext
     - baggage
