@@ -1,0 +1,31 @@
+fullnameOverride: springboot-demo
+
+image:
+  repository: springcommunity/spring-framework-petclinic
+  tag: latest
+  pullPolicy: Always
+
+container:
+  name: springboot-demo
+  port: 8080
+
+resources:
+  requests:
+    cpu: 200m
+    memory: 512Mi
+  limits:
+    cpu: 1000m
+    memory: 1Gi
+
+service:
+  enabled: true
+  type: ClusterIP
+  port: 80
+  targetPort: 8080
+
+podAnnotations:
+  instrumentation.opentelemetry.io/inject-java: "true"
+
+env:
+  OTEL_SERVICE_NAME: "springboot-demo"
+
