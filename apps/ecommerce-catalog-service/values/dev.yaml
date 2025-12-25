@@ -58,3 +58,9 @@ autoscaling:
 externalSecrets:
   enabled: true
   awsSecretName: "dev/e-commerce-catalog-service"
+
+env:
+  OTEL_SERVICE_NAME: "ecommerce-catalog-service"
+
+podAnnotations:
+  instrumentation.opentelemetry.io/inject-nodejs: "true"

@@ -60,3 +60,7 @@ autoscaling:
 env:
   NEXT_PUBLIC_CATALOG_SERVICE_URL: "http://ecommerce-catalog-service.ecommerce-catalog-service"
   NEXT_PUBLIC_ORDER_SERVICE_URL: "http://localhost:3002"
+  OTEL_SERVICE_NAME: "ecommerce-frontend"
+
+podAnnotations:
+  instrumentation.opentelemetry.io/inject-nodejs: "true"
