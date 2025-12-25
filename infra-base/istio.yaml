@@ -34,6 +34,8 @@ spec:
               meshID: mesh1
               multiCluster:
                 clusterName: '{{name}}'
+              hub: docker.io/istio
+              tag: '{{version}}'
             pilot:
               autoscaleEnabled: false # For demo/small env
             meshConfig:
@@ -44,15 +46,18 @@ spec:
       destination:
         server: '{{server}}'
         namespace: istio-system
+      ignoreDifferences:
+        - group: admissionregistration.k8s.io
+          kind: ValidatingWebhookConfiguration
+          jsonPointers:
+            - /webhooks/0/failurePolicy
+            - /webhooks/1/failurePolicy
       syncPolicy:
         automated:
           prune: true
           selfHeal: true
-        ignoreDifferences:
-          - group: admissionregistration.k8s.io
-            kind: ValidatingWebhookConfiguration
-            jsonPointers:
-              - /webhooks/0/failurePolicy
         syncOptions:
           - CreateNamespace=true
           - ServerSideApply=true
+          - RespectIgnoreDifferences=true
+

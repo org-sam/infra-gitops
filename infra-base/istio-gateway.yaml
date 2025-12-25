@@ -31,14 +31,16 @@ spec:
         targetRevision: '{{version}}'
         helm:
           valuesObject:
-            global:
-              hub: docker.io/istio
-              tag: 1.28.2
             service:
-              type: LoadBalancer # Or NodePort/ClusterIP depending on env, but for demo usually LB is expected if on cloud
+              type: LoadBalancer
       destination:
         server: '{{server}}'
         namespace: istio-system
+      ignoreDifferences:
+        - group: admissionregistration.k8s.io
+          kind: ValidatingWebhookConfiguration
+          jsonPointers:
+            - /webhooks/0/failurePolicy
       syncPolicy:
         automated:
           prune: true
@@ -46,3 +48,5 @@ spec:
         syncOptions:
           - CreateNamespace=true
           - ServerSideApply=true
+          - RespectIgnoreDifferences=true
+
