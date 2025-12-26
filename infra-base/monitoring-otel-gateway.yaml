@@ -109,6 +109,12 @@ spec:
                   endpoint: http://monitoring-base-dev-demo-kube-prom-prometheus.monitoring.svc:9090/api/v1/write
                   resource_to_telemetry_conversion:
                     enabled: true
+                  timeout: 30s
+                  retry_on_failure:
+                    enabled: true
+                    initial_interval: 5s
+                    max_interval: 30s
+                    max_elapsed_time: 300s
 
               service:
                 pipelines:
