@@ -50,12 +50,12 @@ spec:
                   root_path: /hostfs
                   collection_interval: 30s
                   scrapers:
-                    cpu:
-                    memory:
-                    disk:
-                    filesystem:
-                    network:
-                    load:
+                    cpu: {}
+                    memory: {}
+                    disk: {}
+                    filesystem: {}
+                    network: {}
+                    load: {}
 
                 k8s_cluster:
                   auth_type: serviceAccount
