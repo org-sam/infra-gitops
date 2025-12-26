@@ -1,52 +1,52 @@
-# apiVersion: argoproj.io/v1alpha1
-# kind: ApplicationSet
-# metadata:
-#   name: kiali
-#   namespace: argocd
-# spec:
-#   generators:
-#   - list:
-#       elements:
-#       - name: dev-demo
-#         server: https://kubernetes.default.svc
-#         version: 2.20.0
-#   template:
-#     metadata:
-#       name: 'kiali-{{name}}'
-#       annotations:
-#         argocd.argoproj.io/sync-wave: "3"
-#     spec:
-#       project: hands-on
-#       source:
-#         repoURL: https://kiali.org/helm-charts
-#         chart: kiali-server
-#         targetRevision: '{{version}}'
-#         helm:
-#           valuesObject:
-#             auth:
-#               strategy: anonymous
-#             deployment:
-#               sidecar_container_config:
-#                 tracing:
-#                   sampling: 100
-#             external_services:
-#               prometheus:
-#                 url: "http://monitoring-base-dev-demo-kube-p-prometheus.monitoring.svc:9090"
-#               grafana:
-#                 enabled: true
-#                 url: "http://monitoring-base-dev-demo-grafana.monitoring.svc:80"
-#               tracing:
-#                 enabled: true
-#                 type: "tempo"
-#                 url: "http://monitoring-tempo-dev-demo.monitoring.svc:3200"
-#                 use_grpc: false
-#       destination:
-#         server: '{{server}}'
-#         namespace: istio-system
-#       syncPolicy:
-#         automated:
-#           prune: true
-#           selfHeal: true
-#         syncOptions:
-#           - CreateNamespace=true
-#           - ServerSideApply=true
+apiVersion: argoproj.io/v1alpha1
+kind: ApplicationSet
+metadata:
+  name: kiali
+  namespace: argocd
+spec:
+  generators:
+  - list:
+      elements:
+      - name: dev-demo
+        server: https://kubernetes.default.svc
+        version: 2.20.0
+  template:
+    metadata:
+      name: 'kiali-{{name}}'
+      annotations:
+        argocd.argoproj.io/sync-wave: "3"
+    spec:
+      project: hands-on
+      source:
+        repoURL: https://kiali.org/helm-charts
+        chart: kiali-server
+        targetRevision: '{{version}}'
+        # helm:
+        #   valuesObject:
+        #     auth:
+        #       strategy: anonymous
+        #     deployment:
+        #       sidecar_container_config:
+        #         tracing:
+        #           sampling: 100
+        #     external_services:
+        #       prometheus:
+        #         url: "http://monitoring-base-dev-demo-kube-p-prometheus.monitoring.svc:9090"
+        #       grafana:
+        #         enabled: true
+        #         url: "http://monitoring-base-dev-demo-grafana.monitoring.svc:80"
+        #       tracing:
+        #         enabled: true
+        #         type: "tempo"
+        #         url: "http://monitoring-tempo-dev-demo.monitoring.svc:3200"
+        #         use_grpc: false
+      destination:
+        server: '{{server}}'
+        namespace: istio-system
+      syncPolicy:
+        automated:
+          prune: true
+          selfHeal: true
+        syncOptions:
+          - CreateNamespace=true
+          - ServerSideApply=true
