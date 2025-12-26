@@ -32,8 +32,7 @@ spec:
         helm:
           valuesObject:
             labels:
-              istio: {{component}}
-            image: docker.io/istio/proxyv2:{{version}}
+              istio: '{{component}}'
             autoscaling:
               enabled: false
             service:
@@ -42,8 +41,6 @@ spec:
               requests:
                 cpu: 100m
                 memory: 128Mi
-            podAnnotations:
-              sidecar.istio.io/inject: "false"
             containerSecurityContext:
               allowPrivilegeEscalation: false
               capabilities:
