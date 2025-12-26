@@ -193,11 +193,17 @@ spec:
                     exporters: [otlp]
 
             extraVolumes:
+              - name: varlogpods
+                hostPath:
+                  path: /var/log/pods
               - name: hostfs
                 hostPath:
                   path: /
 
             extraVolumeMounts:
+              - name: varlogpods
+                mountPath: /var/log/pods
+                readOnly: true
               - name: hostfs
                 mountPath: /hostfs
                 readOnly: true
