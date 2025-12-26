@@ -28,6 +28,7 @@ spec:
       source:
         repoURL: https://istio-release.storage.googleapis.com/charts
         chart: gateway
+        targetRevision: '{{version}}'
         helm:
           valuesObject:
             service:
