@@ -29,10 +29,13 @@ spec:
         repoURL: https://istio-release.storage.googleapis.com/charts
         chart: gateway
         targetRevision: '{{version}}'
-        helm:
           valuesObject:
             service:
               type: LoadBalancer
+              annotations:
+                service.beta.kubernetes.io/aws-load-balancer-scheme: "internet-facing"
+                service.beta.kubernetes.io/aws-load-balancer-nlb-target-type: "ip"
+                service.beta.kubernetes.io/aws-load-balancer-type: "external"
       destination:
         server: '{{server}}'
         namespace: istio-system
