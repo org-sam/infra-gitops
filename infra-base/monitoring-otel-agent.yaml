@@ -25,6 +25,14 @@ spec:
             mode: daemonset
             fullnameOverride: "otel-agent"
 
+            resources:
+              requests:
+                memory: 512Mi
+                cpu: 200m
+              limits:
+                memory: 1Gi
+                cpu: 500m
+
             image:
               repository: "otel/opentelemetry-collector-k8s"
 
@@ -154,7 +162,7 @@ spec:
                   timeout: 1s
                   send_batch_size: 1024
                 memory_limiter:
-                  limit_mib: 512
+                  limit_mib: 1024
                   check_interval: 5s
                 k8sattributes:
                   auth_type: serviceAccount
