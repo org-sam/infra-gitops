@@ -35,18 +35,7 @@ spec:
               kubernetesAttributes:
                 enabled: true
               kubeletMetrics:
-                enabled: true
-                metricGroups:
-                  - node
-                  - pod
-                  - container
-                metrics:
-                  container.cpu.utilization:
-                    enabled: false
-                  k8s.node.cpu.utilization:
-                    enabled: false
-                  k8s.pod.cpu.utilization:
-                    enabled: false
+                enabled: false
 
             config:
               receivers:
@@ -56,6 +45,23 @@ spec:
                       endpoint: 0.0.0.0:4317
                     http:
                       endpoint: 0.0.0.0:4318
+
+                kubeletstats:
+                  collection_interval: 30s
+                  auth_type: serviceAccount
+                  endpoint: '${env:K8S_NODE_NAME}:10250'
+                  insecure_skip_verify: true
+                  metric_groups:
+                    - node
+                    - pod
+                    - container
+                  metrics:
+                    container.cpu.utilization:
+                      enabled: false
+                    k8s.node.cpu.utilization:
+                      enabled: false
+                    k8s.pod.cpu.utilization:
+                      enabled: false
 
                 hostmetrics:
                   root_path: /hostfs
