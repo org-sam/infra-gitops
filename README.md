@@ -30,7 +30,7 @@ graph TD
     end
 
     subgraph "Observabilidade"
-    F1[LGTM Stack] & F2[OpenTelemetry]
+    F1[Grafana Stack] & F2[OpenTelemetry]
     end
 ```
 
