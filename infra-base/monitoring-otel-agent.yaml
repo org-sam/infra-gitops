@@ -1,0 +1,135 @@
+apiVersion: argoproj.io/v1alpha1
+kind: ApplicationSet
+metadata:
+  name: monitoring-otel-agent
+  namespace: argocd
+spec:
+  generators:
+  - list:
+      elements:
+      - name: dev-demo
+        server: https://kubernetes.default.svc
+        revision: 0.104.0
+
+  template:
+    metadata:
+      name: 'monitoring-otel-agent-{{name}}'
+    spec:
+      project: hands-on
+      source:
+        repoURL: 'https://open-telemetry.github.io/opentelemetry-helm-charts'
+        chart: opentelemetry-collector
+        targetRevision: '{{revision}}'
+        helm:
+          valuesObject:
+            mode: daemonset
+            fullnameOverride: "otel-agent"
+
+            image:
+              repository: "otel/opentelemetry-collector-contrib"
+              tag: "0.104.0"
+
+            presets:
+              logsCollection:
+                enabled: true
+                includeCollectorLogs: false
+              hostMetrics:
+                enabled: true
+              kubernetesAttributes:
+                enabled: true
+              kubeletMetrics:
+                enabled: true
+
+            config:
+              receivers:
+                otlp:
+                  protocols:
+                    grpc:
+                      endpoint: 0.0.0.0:4317
+                    http:
+                      endpoint: 0.0.0.0:4318
+
+                hostmetrics:
+                  collection_interval: 30s
+                  scrapers:
+                    - cpu
+                    - memory
+                    - disk
+                    - filesystem
+                    - network
+                    - load
+
+                filelog:
+                  include:
+                    - /var/log/pods/*/*/*.log
+                  exclude:
+                    - /var/log/pods/*/otc-container/*.log
+                  include_file_path: true
+                  include_file_name: false
+                  operators:
+                    - type: json_parser
+                      id: parser-docker
+                      timestamp:
+                        parse_from: attributes.time
+                        layout: '%Y-%m-%dT%H:%M:%S.%LZ'
+
+                k8s_cluster:
+                  auth_type: serviceAccount
+                  node_conditions_to_report:
+                    - Ready
+                    - MemoryPressure
+                    - DiskPressure
+                  allocatable_types_to_report:
+                    - cpu
+                    - memory
+                    - storage
+
+              processors:
+                batch:
+                  timeout: 1s
+                  send_batch_size: 1024
+                memory_limiter:
+                  limit_mib: 512
+                  check_interval: 5s
+
+              exporters:
+                otlp:
+                  endpoint: "otel-gateway.monitoring.svc:4317"
+                  tls:
+                    insecure: true
+
+              service:
+                pipelines:
+                  logs:
+                    receivers: [filelog, otlp]
+                    processors: [memory_limiter, batch]
+                    exporters: [otlp]
+                  metrics:
+                    receivers: [hostmetrics, kubeletmetrics, k8s_cluster, otlp]
+                    processors: [memory_limiter, batch]
+                    exporters: [otlp]
+                  traces:
+                    receivers: [otlp]
+                    processors: [memory_limiter, batch]
+                    exporters: [otlp]
+
+            clusterRole:
+              create: true
+              rules:
+              - apiGroups: [""]
+                resources: ["pods", "namespaces", "nodes", "nodes/stats"]
+                verbs: ["get", "watch", "list"]
+              - apiGroups: ["apps"]
+                resources: ["replicasets", "deployments", "statefulsets", "daemonsets"]
+                verbs: ["get", "watch", "list"]
+
+      destination:
+        server: '{{server}}'
+        namespace: monitoring
+      syncPolicy:
+        automated:
+          prune: true
+          selfHeal: true
+        syncOptions:
+          - CreateNamespace=true
+          - ServerSideApply=true

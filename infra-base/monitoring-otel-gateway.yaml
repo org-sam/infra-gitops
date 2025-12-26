@@ -1,0 +1,139 @@
+apiVersion: argoproj.io/v1alpha1
+kind: ApplicationSet
+metadata:
+  name: monitoring-otel-gateway
+  namespace: argocd
+spec:
+  generators:
+  - list:
+      elements:
+      - name: dev-demo
+        server: https://kubernetes.default.svc
+        revision: 0.104.0
+
+  template:
+    metadata:
+      name: 'monitoring-otel-gateway-{{name}}'
+    spec:
+      project: hands-on
+      source:
+        repoURL: 'https://open-telemetry.github.io/opentelemetry-helm-charts'
+        chart: opentelemetry-collector
+        targetRevision: '{{revision}}'
+        helm:
+          valuesObject:
+            mode: deployment
+            fullnameOverride: "otel-gateway"
+            replicaCount: 1
+
+            image:
+              repository: "otel/opentelemetry-collector-contrib"
+              tag: "0.104.0"
+
+            resources:
+              requests:
+                memory: 1Gi
+                cpu: 500m
+              limits:
+                memory: 2Gi
+                cpu: 1000m
+
+            config:
+              receivers:
+                otlp:
+                  protocols:
+                    grpc:
+                      endpoint: 0.0.0.0:4317
+                    http:
+                      endpoint: 0.0.0.0:4318
+
+              processors:
+                batch:
+                  timeout: 1s
+                  send_batch_size: 1024
+
+                memory_limiter:
+                  limit_mib: 2048
+                  check_interval: 5s
+
+                k8sattributes:
+                  auth_type: "serviceAccount"
+                  passthrough: false
+                  extract:
+                    metadata:
+                      - k8s.namespace.name
+                      - k8s.deployment.name
+                      - k8s.statefulset.name
+                      - k8s.daemonset.name
+                      - k8s.pod.name
+                      - k8s.node.name
+                      - k8s.pod.uid
+                    labels:
+                      - tag_name: app
+                        key: app.kubernetes.io/name
+                        from: pod
+
+                tail_sampling:
+                  policies:
+                    - name: errors
+                      type: status_code
+                      status_code:
+                        status_codes: [ERROR]
+                    - name: slow-traces
+                      type: latency
+                      latency:
+                        threshold_ms: 1000
+                    - name: probabilistic-sample
+                      type: probabilistic
+                      probabilistic:
+                        sampling_percentage: 10
+
+              exporters:
+                loki:
+                  endpoint: http://monitoring-loki-dev-demo-gateway.monitoring.svc:80/loki/api/v1/push
+
+                otlp/tempo:
+                  endpoint: "monitoring-tempo-dev-demo.monitoring.svc:4317"
+                  tls:
+                    insecure: true
+
+                prometheusremotewrite:
+                  endpoint: http://monitoring-base-dev-demo-kube-prom-prometheus.monitoring.svc:9090/api/v1/write
+                  resource_to_telemetry_conversion:
+                    enabled: true
+
+              service:
+                pipelines:
+                  logs:
+                    receivers: [otlp]
+                    processors: [memory_limiter, k8sattributes, batch]
+                    exporters: [loki]
+                  metrics:
+                    receivers: [otlp]
+                    processors: [memory_limiter, k8sattributes, batch]
+                    exporters: [prometheusremotewrite]
+                  traces:
+                    receivers: [otlp]
+                    processors: [memory_limiter, k8sattributes, tail_sampling, batch]
+                    exporters: [otlp/tempo]
+
+            clusterRole:
+              create: true
+              rules:
+              - apiGroups: [""]
+                resources: ["pods", "namespaces", "nodes"]
+                verbs: ["get", "watch", "list"]
+              - apiGroups: ["apps"]
+                resources: ["replicasets", "deployments", "statefulsets", "daemonsets"]
+                verbs: ["get", "watch", "list"]
+
+      destination:
+        server: '{{server}}'
+        namespace: monitoring
+      syncPolicy:
+        automated:
+          prune: true
+          selfHeal: true
+        syncOptions:
+          - CreateNamespace=true
+          - ServerSideApply=true
