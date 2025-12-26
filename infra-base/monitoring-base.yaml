@@ -57,6 +57,7 @@ spec:
             prometheus:
               enabled: true
               prometheusSpec:
+                enableRemoteWriteReceiver: true
                 retention: 10d
                 storageSpec:
                   volumeClaimTemplate:
