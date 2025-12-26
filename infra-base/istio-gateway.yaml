@@ -33,6 +33,10 @@ spec:
           values: |
             labels:
               sidecar.istio.io/inject: "false"
+            image:
+              registry: docker.io/istio
+              repository: proxyv2
+              tag: {{version}}
       destination:
         server: '{{server}}'
         namespace: istio-system
