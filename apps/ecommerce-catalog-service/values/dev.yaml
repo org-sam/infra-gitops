@@ -65,3 +65,4 @@ env:
 opentelemetry:
   enabled: true
   type: nodejs
+  endpoint: "http://otel-gateway.monitoring.svc:4318"
