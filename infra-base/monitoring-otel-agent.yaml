@@ -30,10 +30,9 @@ spec:
 
             presets:
               logsCollection:
-                enabled: true
-                includeCollectorLogs: false
+                enabled: false
               kubernetesAttributes:
-                enabled: true
+                enabled: false
               kubeletMetrics:
                 enabled: false
 
@@ -157,8 +156,22 @@ spec:
                 memory_limiter:
                   limit_mib: 512
                   check_interval: 5s
+                k8sattributes:
+                  auth_type: serviceAccount
+                  passthrough: false
+                  extract:
+                    metadata:
+                      - k8s.namespace.name
+                      - k8s.pod.name
+                      - k8s.pod.uid
+                      - k8s.node.name
 
               exporters:
+                debug:
+                  verbosity: detailed
+                  sampling_initial: 5
+                  sampling_thereafter: 200
+
                 otlp:
                   endpoint: "otel-gateway.monitoring.svc:4317"
                   tls:
@@ -169,7 +182,7 @@ spec:
                   logs:
                     receivers: [filelog, otlp]
                     processors: [memory_limiter, k8sattributes, batch]
-                    exporters: [otlp]
+                    exporters: [debug, otlp]
                   metrics:
                     receivers: [hostmetrics, kubeletstats, k8s_cluster, otlp]
                     processors: [memory_limiter, batch]
