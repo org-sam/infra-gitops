@@ -95,8 +95,10 @@ spec:
                         sampling_percentage: 10
 
               exporters:
-                loki:
-                  endpoint: http://monitoring-loki-dev-demo-gateway.monitoring.svc:80/loki/api/v1/push
+                otlphttp/loki:
+                  endpoint: http://monitoring-loki-dev-demo.monitoring.svc:3100/otlp
+                  tls:
+                    insecure: true
 
                 otlp/tempo:
                   endpoint: "monitoring-tempo-dev-demo.monitoring.svc:4317"
@@ -113,7 +115,7 @@ spec:
                   logs:
                     receivers: [otlp]
                     processors: [memory_limiter, resource, attributes, batch]
-                    exporters: [loki]
+                    exporters: [otlphttp/loki]
                   metrics:
                     receivers: [otlp]
                     processors: [memory_limiter, k8sattributes, batch]
