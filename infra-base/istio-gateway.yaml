@@ -1,67 +1,67 @@
-apiVersion: argoproj.io/v1alpha1
-kind: ApplicationSet
-metadata:
-  name: istio-gateway
-  namespace: argocd
-spec:
-  generators:
-  - list:
-      elements:
-  generators:
-  - list:
-      elements:
-      - name: dev-demo
-        server: https://kubernetes.default.svc
-        version: 1.28.2
-        component: ingressgateway
-      - name: dev-demo
-        server: https://kubernetes.default.svc
-        version: 1.28.2
-        component: egressgateway
-  template:
-    metadata:
-      name: 'istio-{{component}}-{{name}}'
-      annotations:
-        argocd.argoproj.io/sync-wave: "2"
-    spec:
-      project: hands-on
-      source:
-        repoURL: https://istio-release.storage.googleapis.com/charts
-        chart: gateway
-        targetRevision: '{{version}}'
-        helm:
-          valuesObject:
-            labels:
-              istio: '{{component}}'
-            autoscaling:
-              enabled: false
-            service:
-              type: LoadBalancer
-            resources:
-              requests:
-                cpu: 100m
-                memory: 128Mi
-            containerSecurityContext:
-              allowPrivilegeEscalation: false
-              capabilities:
-                drop:
-                - ALL
-              privileged: false
-              readOnlyRootFilesystem: true
-      destination:
-        server: '{{server}}'
-        namespace: istio-system
-      ignoreDifferences:
-        - group: admissionregistration.k8s.io
-          kind: ValidatingWebhookConfiguration
-          jsonPointers:
-            - /webhooks/0/failurePolicy
-      syncPolicy:
-        automated:
-          prune: true
-          selfHeal: true
-        syncOptions:
-          - CreateNamespace=true
-          - ServerSideApply=true
-          - RespectIgnoreDifferences=true
+# apiVersion: argoproj.io/v1alpha1
+# kind: ApplicationSet
+# metadata:
+#   name: istio-gateway
+#   namespace: argocd
+# spec:
+#   generators:
+#   - list:
+#       elements:
+#   generators:
+#   - list:
+#       elements:
+#       - name: dev-demo
+#         server: https://kubernetes.default.svc
+#         version: 1.28.2
+#         component: ingressgateway
+#       - name: dev-demo
+#         server: https://kubernetes.default.svc
+#         version: 1.28.2
+#         component: egressgateway
+#   template:
+#     metadata:
+#       name: 'istio-{{component}}-{{name}}'
+#       annotations:
+#         argocd.argoproj.io/sync-wave: "2"
+#     spec:
+#       project: hands-on
+#       source:
+#         repoURL: https://istio-release.storage.googleapis.com/charts
+#         chart: gateway
+#         targetRevision: '{{version}}'
+#         helm:
+#           valuesObject:
+#             labels:
+#               istio: '{{component}}'
+#             autoscaling:
+#               enabled: false
+#             service:
+#               type: LoadBalancer
+#             resources:
+#               requests:
+#                 cpu: 100m
+#                 memory: 128Mi
+#             containerSecurityContext:
+#               allowPrivilegeEscalation: false
+#               capabilities:
+#                 drop:
+#                 - ALL
+#               privileged: false
+#               readOnlyRootFilesystem: true
+#       destination:
+#         server: '{{server}}'
+#         namespace: istio-system
+#       ignoreDifferences:
+#         - group: admissionregistration.k8s.io
+#           kind: ValidatingWebhookConfiguration
+#           jsonPointers:
+#             - /webhooks/0/failurePolicy
+#       syncPolicy:
+#         automated:
+#           prune: true
+#           selfHeal: true
+#         syncOptions:
+#           - CreateNamespace=true
+#           - ServerSideApply=true
+#           - RespectIgnoreDifferences=true
 

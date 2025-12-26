@@ -1,63 +1,63 @@
-apiVersion: argoproj.io/v1alpha1
-kind: ApplicationSet
-metadata:
-  name: istio
-  namespace: argocd
-spec:
-  generators:
-  - list:
-      elements:
-      - name: dev-demo
-        server: https://kubernetes.default.svc
-        version: 1.28.2
-        chart: base
-        wave: "0"
-      - name: dev-demo
-        server: https://kubernetes.default.svc
-        version: 1.28.2
-        chart: istiod
-        wave: "1"
-  template:
-    metadata:
-      name: 'istio-{{chart}}-{{name}}'
-      annotations:
-        argocd.argoproj.io/sync-wave: '{{wave}}'
-    spec:
-      project: hands-on
-      source:
-        repoURL: https://istio-release.storage.googleapis.com/charts
-        chart: '{{chart}}'
-        targetRevision: '{{version}}'
-        helm:
-          valuesObject:
-            global:
-              meshID: mesh1
-              multiCluster:
-                clusterName: '{{name}}'
-              hub: docker.io/istio
-              tag: '{{version}}'
-            pilot:
-              autoscaleEnabled: false # For demo/small env
-            meshConfig:
-              accessLogFile: /dev/stdout
-              extensionProviders:
-              - name: prometheus
-                prometheus: {}
-      destination:
-        server: '{{server}}'
-        namespace: istio-system
-      ignoreDifferences:
-        - group: admissionregistration.k8s.io
-          kind: ValidatingWebhookConfiguration
-          jsonPointers:
-            - /webhooks/0/failurePolicy
-            - /webhooks/1/failurePolicy
-      syncPolicy:
-        automated:
-          prune: true
-          selfHeal: true
-        syncOptions:
-          - CreateNamespace=true
-          - ServerSideApply=true
-          - RespectIgnoreDifferences=true
+# apiVersion: argoproj.io/v1alpha1
+# kind: ApplicationSet
+# metadata:
+#   name: istio
+#   namespace: argocd
+# spec:
+#   generators:
+#   - list:
+#       elements:
+#       - name: dev-demo
+#         server: https://kubernetes.default.svc
+#         version: 1.28.2
+#         chart: base
+#         wave: "0"
+#       - name: dev-demo
+#         server: https://kubernetes.default.svc
+#         version: 1.28.2
+#         chart: istiod
+#         wave: "1"
+#   template:
+#     metadata:
+#       name: 'istio-{{chart}}-{{name}}'
+#       annotations:
+#         argocd.argoproj.io/sync-wave: '{{wave}}'
+#     spec:
+#       project: hands-on
+#       source:
+#         repoURL: https://istio-release.storage.googleapis.com/charts
+#         chart: '{{chart}}'
+#         targetRevision: '{{version}}'
+#         helm:
+#           valuesObject:
+#             global:
+#               meshID: mesh1
+#               multiCluster:
+#                 clusterName: '{{name}}'
+#               hub: docker.io/istio
+#               tag: '{{version}}'
+#             pilot:
+#               autoscaleEnabled: false # For demo/small env
+#             meshConfig:
+#               accessLogFile: /dev/stdout
+#               extensionProviders:
+#               - name: prometheus
+#                 prometheus: {}
+#       destination:
+#         server: '{{server}}'
+#         namespace: istio-system
+#       ignoreDifferences:
+#         - group: admissionregistration.k8s.io
+#           kind: ValidatingWebhookConfiguration
+#           jsonPointers:
+#             - /webhooks/0/failurePolicy
+#             - /webhooks/1/failurePolicy
+#       syncPolicy:
+#         automated:
+#           prune: true
+#           selfHeal: true
+#         syncOptions:
+#           - CreateNamespace=true
+#           - ServerSideApply=true
+#           - RespectIgnoreDifferences=true
 
