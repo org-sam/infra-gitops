@@ -33,8 +33,6 @@ spec:
               logsCollection:
                 enabled: true
                 includeCollectorLogs: false
-              hostMetrics:
-                enabled: true
               kubernetesAttributes:
                 enabled: true
               kubeletMetrics:
@@ -52,12 +50,12 @@ spec:
                 hostmetrics:
                   collection_interval: 30s
                   scrapers:
-                    - cpu
-                    - memory
-                    - disk
-                    - filesystem
-                    - network
-                    - load
+                    cpu: {}
+                    memory: {}
+                    disk: {}
+                    filesystem: {}
+                    network: {}
+                    load: {}
 
                 filelog:
                   include:
