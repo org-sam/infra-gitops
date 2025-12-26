@@ -29,6 +29,10 @@ spec:
         repoURL: https://istio-release.storage.googleapis.com/charts
         chart: gateway
         targetRevision: '{{version}}'
+        helm:
+          values: |
+            labels:
+              sidecar.istio.io/inject: "false"
       destination:
         server: '{{server}}'
         namespace: istio-system
