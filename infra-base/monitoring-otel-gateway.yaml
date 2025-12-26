@@ -115,7 +115,7 @@ spec:
                 pipelines:
                   logs:
                     receivers: [otlp]
-                    processors: [memory_limiter, resource, attributes, batch]
+                    processors: [memory_limiter, resource, transform, batch]
                     exporters: [otlphttp/loki]
                   metrics:
                     receivers: [otlp]
