@@ -26,8 +26,7 @@ spec:
             fullnameOverride: "otel-agent"
 
             image:
-              repository: "otel/opentelemetry-collector-contrib"
-              tag: "0.104.0"
+              repository: "otel/opentelemetry-collector-k8s"
 
             presets:
               logsCollection:
@@ -48,28 +47,15 @@ spec:
                       endpoint: 0.0.0.0:4318
 
                 hostmetrics:
+                  root_path: /hostfs
                   collection_interval: 30s
                   scrapers:
-                    cpu: {}
-                    memory: {}
-                    disk: {}
-                    filesystem: {}
-                    network: {}
-                    load: {}
-
-                filelog:
-                  include:
-                    - /var/log/pods/*/*/*.log
-                  exclude:
-                    - /var/log/pods/*/otc-container/*.log
-                  include_file_path: true
-                  include_file_name: false
-                  operators:
-                    - type: json_parser
-                      id: parser-docker
-                      timestamp:
-                        parse_from: attributes.time
-                        layout: '%Y-%m-%dT%H:%M:%S.%LZ'
+                    cpu:
+                    memory:
+                    disk:
+                    filesystem:
+                    network:
+                    load:
 
                 k8s_cluster:
                   auth_type: serviceAccount
@@ -103,13 +89,24 @@ spec:
                     processors: [memory_limiter, batch]
                     exporters: [otlp]
                   metrics:
-                    receivers: [hostmetrics, kubeletmetrics, k8s_cluster, otlp]
+                    receivers: [hostmetrics, kubeletstats, k8s_cluster, otlp]
                     processors: [memory_limiter, batch]
                     exporters: [otlp]
                   traces:
                     receivers: [otlp]
                     processors: [memory_limiter, batch]
                     exporters: [otlp]
+
+            extraVolumes:
+              - name: hostfs
+                hostPath:
+                  path: /
+
+            extraVolumeMounts:
+              - name: hostfs
+                mountPath: /hostfs
+                readOnly: true
+                mountPropagation: HostToContainer
 
             clusterRole:
               create: true
