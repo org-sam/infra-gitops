@@ -36,6 +36,17 @@ spec:
                 enabled: true
               kubeletMetrics:
                 enabled: true
+                metricGroups:
+                  - node
+                  - pod
+                  - container
+                metrics:
+                  container.cpu.utilization:
+                    enabled: false
+                  k8s.node.cpu.utilization:
+                    enabled: false
+                  k8s.pod.cpu.utilization:
+                    enabled: false
 
             config:
               receivers:
