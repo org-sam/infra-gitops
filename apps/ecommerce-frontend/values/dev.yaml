@@ -65,4 +65,3 @@ env:
 opentelemetry:
   enabled: true
   type: nodejs
-  endpoint: "http://signoz-dev-demo-otel-collector.signoz.svc.cluster.local:4318"
