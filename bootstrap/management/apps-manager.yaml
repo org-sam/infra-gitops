@@ -10,7 +10,7 @@ spec:
   source:
     repoURL: 'https://github.com/org-sam/infra-gitops.git'
     targetRevision: HEAD
-    path: apps
+    path: apps/bookinfo
     directory:
       recurse: true
       include: '*appset.yaml'    

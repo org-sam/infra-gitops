@@ -1,0 +1,61 @@
+apiVersion: argoproj.io/v1alpha1
+kind: ApplicationSet
+metadata:
+  name: karpenter
+  namespace: argocd
+spec:
+  generators:
+  - list:
+      elements:
+      - name: dev-demo
+        server: https://kubernetes.default.svc
+        api_endpoint: https://4ED6E657DC2A2C7F1F71975F97D2DCA5.gr7.us-east-2.eks.amazonaws.com
+        role_arn: arn:aws:iam::732263836773:role/KarpenterController-2025122713160035500000001a
+        queue_name: Karpenter-dev-demo
+        revision: 1.8.2
+
+  template:
+    metadata:
+      name: "karpenter-{{name}}"
+      annotations:
+        argocd.argoproj.io/sync-wave: "0"
+    spec:
+      project: hands-on
+
+      source:
+        repoURL: public.ecr.aws/karpenter
+        chart: karpenter
+        targetRevision: "{{revision}}"
+        helm:
+          valuesObject:
+            replicas: 1
+
+            settings:
+              clusterName: '{{name}}'
+              clusterEndpoint: '{{api_endpoint}}'
+              interruptionQueue: '{{queue_name}}'
+
+            serviceAccount:
+              create: true
+              name: karpenter
+
+            controller:
+              resources:
+                requests:
+                  cpu: 100m
+                  memory: 256Mi
+                limits:
+                  cpu: 500m
+                  memory: 1Gi
+
+      destination:
+        server: "{{server}}"
+        namespace: karpenter
+
+      syncPolicy:
+        automated:
+          prune: true
+          selfHeal: true
+        syncOptions:
+          - CreateNamespace=true
+          - ServerSideApply=true
