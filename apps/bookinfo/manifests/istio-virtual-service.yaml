@@ -4,8 +4,12 @@ metadata:
   name: reviews
   namespace: bookinfo
 spec:
+  gateway:
+    - reviews
+    - mesh
   hosts:
   - reviews
+  - bookinfo.mkt.posanhanguera.com.br
   http:
   # Roteamento baseado em URI ou em Headers
   - match:  # curl http://reviews:9080/v1/reviews/0
