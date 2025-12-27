@@ -1,7 +1,7 @@
 apiVersion: networking.istio.io/v1
 kind: Gateway
 metadata:
-  name: reviews
+  name: bookinfo-gateway
   namespace: bookinfo
 spec:
   selector:
