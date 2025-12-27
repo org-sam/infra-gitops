@@ -1,22 +1,51 @@
 apiVersion: networking.istio.io/v1
 kind: VirtualService
 metadata:
-  name: reviews
+  name: 
   namespace: bookinfo
 spec:
   hosts:
-    - reviews
+  - reviews
   http:
-    - route:
-        - destination:
-            host: reviews
-            subset: v1
-          weight: 5
-        - destination:
-            host: reviews
-            subset: v2
-          weight: 5
-        - destination:
-            host: reviews
-            subset: v3
-          weight: 90
+  # Roteamento baseado em URI com prefixo
+  - match:
+    - uri:
+        prefix: /v1/
+    rewrite:
+      uri: "/"
+    route:
+    - destination:
+        host: reviews
+        subset: v1
+  - match:
+    - uri:
+        prefix: /v2/
+    rewrite:
+      uri: "/"
+    route:
+    - destination:
+        host: reviews
+        subset: v2
+  - match:
+    - uri:
+        prefix: /v3/
+    rewrite:
+      uri: "/"
+    route:
+    - destination:
+        host: reviews
+        subset: v3
+  # Rota default (fallback) - distribuição 34/33/33
+  - route:
+    - destination:
+        host: reviews
+        subset: v1
+      weight: 34
+    - destination:
+        host: reviews
+        subset: v2
+      weight: 33
+    - destination:
+        host: reviews
+        subset: v3
+      weight: 33
