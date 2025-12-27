@@ -24,6 +24,8 @@ spec:
         repoURL: https://github.com/org-sam/infra-gitops
         targetRevision: HEAD
         path: apps/bookinfo/manifests
+        directory:
+          recurse: true
       
       syncPolicy:
         automated:
