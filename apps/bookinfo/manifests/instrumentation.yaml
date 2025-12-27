@@ -5,9 +5,8 @@ metadata:
   namespace: bookinfo
 spec:
   resource:
-    attributes:
-      - key: service.name
-        value: productpage
+    resourceAttributes:
+      service.name: productpage
   exporter:
     endpoint: http://otel-collector.monitoring.svc:4317
   python:
@@ -26,9 +25,8 @@ metadata:
   namespace: bookinfo
 spec:
   resource:
-    attributes:
-      - key: service.name
-        value: reviews
+    resourceAttributes:
+      service.name: reviews
   exporter:
     endpoint: http://otel-collector.monitoring.svc:4317
   java:
@@ -47,9 +45,8 @@ metadata:
   namespace: bookinfo
 spec:
   resource:
-    attributes:
-      - key: service.name
-        value: ratings
+    resourceAttributes:
+      service.name: ratings
   exporter:
     endpoint: http://otel-collector.monitoring.svc:4318
   nodejs:
