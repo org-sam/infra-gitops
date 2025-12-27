@@ -4,6 +4,10 @@ metadata:
   name: bookinfo-productpage
   namespace: bookinfo
 spec:
+  resource:
+    attributes:
+      - key: service.name
+        value: productpage
   exporter:
     endpoint: http://otel-collector.monitoring.svc:4317
   python:
@@ -21,6 +25,10 @@ metadata:
   name: bookinfo-reviews
   namespace: bookinfo
 spec:
+  resource:
+    attributes:
+      - key: service.name
+        value: reviews
   exporter:
     endpoint: http://otel-collector.monitoring.svc:4317
   java:
@@ -38,6 +46,10 @@ metadata:
   name: bookinfo-ratings
   namespace: bookinfo
 spec:
+  resource:
+    attributes:
+      - key: service.name
+        value: ratings
   exporter:
     endpoint: http://otel-collector.monitoring.svc:4318
   nodejs:
