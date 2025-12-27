@@ -7,7 +7,7 @@ spec:
   hosts:
   - reviews
   http:
-  # Roteamento baseado em URI com prefixo
+  # Roteamento baseado em URI ou em Headers
   - match:
     - uri:
         prefix: /v1/
@@ -18,10 +18,9 @@ spec:
         host: reviews
         subset: v1
   - match:
-    - uri:
-        prefix: /v2/
-    rewrite:
-      uri: "/"
+    - headers:
+        x-version:
+          exact: v2
     route:
     - destination:
         host: reviews
