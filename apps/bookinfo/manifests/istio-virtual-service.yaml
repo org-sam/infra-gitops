@@ -8,7 +8,7 @@ spec:
   - reviews
   http:
   # Roteamento baseado em URI ou em Headers
-  - match:
+  - match:  # curl http://reviews:9080/v1/reviews/0
     - uri:
         prefix: /v1/
     rewrite:
@@ -17,7 +17,7 @@ spec:
     - destination:
         host: reviews
         subset: v1
-  - match:
+  - match:  # curl -H "x-version: v2" http://reviews:9080/reviews/0
     - headers:
         x-version:
           exact: v2
@@ -25,7 +25,7 @@ spec:
     - destination:
         host: reviews
         subset: v2
-  - match:
+  - match:  # curl http://reviews:9080/v1/reviews/0
     - uri:
         prefix: /v3/
     rewrite:
@@ -35,6 +35,7 @@ spec:
         host: reviews
         subset: v3
   # Rota default (fallback) - distribuição 34/33/33
+  # curl http://reviews:9080/reviews/0
   - route:
     - destination:
         host: reviews
