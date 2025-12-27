@@ -12,7 +12,7 @@ spec:
   python:
     env:
       - name: OTEL_EXPORTER_OTLP_PROTOCOL
-        value: grpc
+        value: http/protobuf
     image: ghcr.io/open-telemetry/opentelemetry-operator/autoinstrumentation-python:latest
   propagators:
     - tracecontext
@@ -33,6 +33,9 @@ spec:
   exporter:
     endpoint: http://otel-collector.monitoring.svc:4318
   java:
+    env:
+      - name: OTEL_EXPORTER_OTLP_PROTOCOL
+        value: http/protobuf
     image: ghcr.io/open-telemetry/opentelemetry-operator/autoinstrumentation-java:latest
   propagators:
     - tracecontext
@@ -55,7 +58,7 @@ spec:
   nodejs:
     env:
       - name: OTEL_EXPORTER_OTLP_PROTOCOL
-        value: grpc
+        value: http/protobuf
     image: ghcr.io/open-telemetry/opentelemetry-operator/autoinstrumentation-nodejs:latest
   propagators:
     - tracecontext
