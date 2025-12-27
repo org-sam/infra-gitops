@@ -8,7 +8,7 @@ spec:
     resourceAttributes:
       service.name: productpage
   exporter:
-    endpoint: http://otel-collector.monitoring.svc:4317
+    endpoint: http://otel-collector.monitoring.svc:4318
   python:
     env:
       - name: OTEL_EXPORTER_OTLP_PROTOCOL
@@ -31,7 +31,7 @@ spec:
     resourceAttributes:
       service.name: reviews
   exporter:
-    endpoint: http://otel-collector.monitoring.svc:4317
+    endpoint: http://otel-collector.monitoring.svc:4318
   java:
     image: ghcr.io/open-telemetry/opentelemetry-operator/autoinstrumentation-java:latest
   propagators:
@@ -51,7 +51,7 @@ spec:
     resourceAttributes:
       service.name: ratings
   exporter:
-    endpoint: http://otel-collector.monitoring.svc:4317
+    endpoint: http://otel-collector.monitoring.svc:4318
   nodejs:
     env:
       - name: OTEL_EXPORTER_OTLP_PROTOCOL
