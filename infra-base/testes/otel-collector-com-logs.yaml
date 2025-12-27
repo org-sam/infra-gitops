@@ -1,0 +1,111 @@
+apiVersion: argoproj.io/v1alpha1
+kind: ApplicationSet
+metadata:
+  name: monitoring-otel-collector
+  namespace: argocd
+spec:
+  generators:
+  - list:
+      elements:
+      - name: dev-demo
+        server: https://kubernetes.default.svc
+        revision: 0.104.0
+
+  template:
+    metadata:
+      name: 'monitoring-otel-collector-{{name}}'
+    spec:
+      project: hands-on
+      source:
+        repoURL: 'https://open-telemetry.github.io/opentelemetry-helm-charts'
+        chart: opentelemetry-collector
+        targetRevision: '{{revision}}'
+        helm:
+          valuesObject:
+            mode: deployment
+            fullnameOverride: "otel-collector"
+
+            image:
+              repository: "otel/opentelemetry-collector-contrib"
+              tag: "0.104.0"
+
+            config:
+              receivers:
+                otlp:
+                  protocols:
+                    grpc:
+                      endpoint: 0.0.0.0:4317
+                    http:
+                      endpoint: 0.0.0.0:4318
+
+              processors:
+                batch:
+                  timeout: 1s
+                  send_batch_size: 1024
+                k8sattributes:
+                  auth_type: "serviceAccount"
+                  passthrough: false
+                  extract:
+                    metadata:
+                      - k8s.pod.name
+                      - k8s.pod.uid
+                      - k8s.deployment.name
+                      - k8s.namespace.name
+
+              exporters:
+                otlp:
+                  # Seu endpoint existente para o Tempo (Traces)
+                  endpoint: "monitoring-tempo-dev-demo.monitoring.svc:4317"
+                  tls:
+                    insecure: true
+                
+                # --- NOVO: Configuração para o Loki (Logs) ---
+                loki:
+                  # Ajuste o endereço abaixo se o seu serviço do Loki tiver outro nome
+                  endpoint: "http://loki.monitoring.svc:3100/loki/api/v1/push"
+                  tls:
+                    insecure: true
+                  # CRÍTICO: Isso converte atributos do OTel (namespace, pod) em Labels do Loki.
+                  # Sem isso, seus logs no Loki ficarão sem indexação e difíceis de buscar.
+                  resource_to_telemetry_conversion:
+                    enabled: true
+
+                debug:
+                  verbosity: detailed
+
+              service:
+                pipelines:
+                  traces:
+                    receivers: [otlp]
+                    processors: [k8sattributes, batch]
+                    exporters: [otlp, debug]
+                  
+                  # --- NOVO: Pipeline de Logs ---
+                  logs:
+                    # Recebe do Istio via OTLP (mesma porta dos traces)
+                    receivers: [otlp]
+                    # Enriquece com metadados K8s e faz batching
+                    processors: [k8sattributes, batch]
+                    # Envia para o Loki
+                    exporters: [loki, debug]
+
+            clusterRole:
+              create: true
+              rules:
+              - apiGroups: [""]
+                resources: ["pods", "namespaces", "nodes"]
+                verbs: ["get", "watch", "list"]
+              - apiGroups: ["apps"]
+                resources: ["replicasets", "deployments", "statefulsets"]
+                verbs: ["get", "watch", "list"]
+
+      destination:
+        server: '{{server}}'
+        namespace: monitoring
+      syncPolicy:
+        automated:
+          prune: true
+          selfHeal: true
+        syncOptions:
+          - CreateNamespace=true
+          - ServerSideApply=true

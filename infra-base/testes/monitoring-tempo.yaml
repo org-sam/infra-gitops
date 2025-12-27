@@ -1,0 +1,58 @@
+apiVersion: argoproj.io/v1alpha1
+kind: ApplicationSet
+metadata:
+  name: monitoring-tempo
+  namespace: argocd
+spec:
+  generators:
+  - list:
+      elements:
+      - name: dev-demo
+        server: https://kubernetes.default.svc
+        revision: 1.24.1
+
+  template:
+    metadata:
+      name: 'monitoring-tempo-{{name}}'
+    spec:
+      project: hands-on
+      ignoreDifferences:
+      - group: apps
+        kind: StatefulSet
+        jsonPointers:
+        - /spec/volumeClaimTemplates
+        
+      source:
+        repoURL: 'https://grafana.github.io/helm-charts'
+        chart: tempo
+        targetRevision: '{{revision}}'
+        helm:
+          valuesObject:
+            tempo:
+              storage:
+                trace:
+                  backend: local
+
+            distributor:
+              receivers:
+                otlp:
+                  protocols:
+                    grpc:
+                      endpoint: 0.0.0.0:4317
+                    http:
+                      endpoint: 0.0.0.0:4318
+
+            persistence:
+              enabled: true
+              size: 10Gi
+
+      destination:
+        server: '{{server}}'
+        namespace: monitoring
+      syncPolicy:
+        automated:
+          prune: true
+          selfHeal: true
+        syncOptions:
+          - CreateNamespace=true
+          - ServerSideApply=true
