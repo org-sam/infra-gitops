@@ -1,0 +1,50 @@
+apiVersion: opentelemetry.io/v1alpha1
+kind: Instrumentation
+metadata:
+  name: bookinfo-productpage
+  namespace: bookinfo
+spec:
+  exporter:
+    endpoint: http://otel-collector.monitoring.svc:4318
+  python:
+    image: ghcr.io/open-telemetry/opentelemetry-operator/autoinstrumentation-python:latest
+  propagators:
+    - tracecontext
+    - baggage
+  sampler:
+    argument: '1.0'
+    type: parentbased_traceidratio
+---
+apiVersion: opentelemetry.io/v1alpha1
+kind: Instrumentation
+metadata:
+  name: bookinfo-reviews
+  namespace: bookinfo
+spec:
+  exporter:
+    endpoint: http://otel-collector.monitoring.svc:4318
+  java:
+    image: ghcr.io/open-telemetry/opentelemetry-operator/autoinstrumentation-java:latest
+  propagators:
+    - tracecontext
+    - baggage
+  sampler:
+    argument: '1.0'
+    type: parentbased_traceidratio
+---
+apiVersion: opentelemetry.io/v1alpha1
+kind: Instrumentation
+metadata:
+  name: bookinfo-ratings
+  namespace: bookinfo
+spec:
+  exporter:
+    endpoint: http://otel-collector.monitoring.svc:4318
+  nodejs:
+    image: ghcr.io/open-telemetry/opentelemetry-operator/autoinstrumentation-nodejs:latest
+  propagators:
+    - tracecontext
+    - baggage
+  sampler:
+    argument: '1.0'
+    type: parentbased_traceidratio

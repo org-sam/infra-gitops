@@ -31,6 +31,7 @@ spec:
         prometheus.io/scrape: "true"
         prometheus.io/port: "9080"
         prometheus.io/path: "/metrics"
+        instrumentation.opentelemetry.io/inject-python: 'true'
       labels:
         app: productpage
         version: v1

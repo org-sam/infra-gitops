@@ -2,10 +2,18 @@
 
 Aplicação de exemplo do Istio composta por 4 microserviços:
 
-- **productpage**: Frontend que chama os demais serviços
-- **details**: Informações sobre o livro
-- **reviews**: Avaliações do livro (3 versões)
-- **ratings**: Classificação por estrelas
+- **productpage** (Python): Frontend que chama os demais serviços
+- **details** (Ruby): Informações sobre o livro
+- **reviews** (Java): Avaliações do livro (3 versões)
+- **ratings** (Node.js): Classificação por estrelas
+
+## Observabilidade
+
+Serviços instrumentados com OpenTelemetry:
+- ✅ **productpage** (Python), **reviews** (Java), **ratings** (Node.js)
+- ❌ **details** (Ruby) - auto-instrumentação não suportada
+- Traces enviados para `otel-collector.monitoring.svc:4318`
+- Sampling rate: 100%
 
 ## Acesso
 
