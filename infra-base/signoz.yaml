@@ -9,7 +9,7 @@ spec:
       elements:
       - name: dev-demo
         server: https://kubernetes.default.svc
-        revision: 0.105.2 
+        revision: 0.105.2
 
   template:
     metadata:
@@ -24,10 +24,37 @@ spec:
         helm:
           valuesObject:
             global:
+              cloud: aws
               storageClass: gp3
 
+            clickhouseOperator:
+              resources:
+                limits:
+                  cpu: 500m
+                  memory: 512Mi
+                requests:
+                  cpu: 100m
+                  memory: 256Mi
+
             clickhouse:
-              installCustomStorageClass: true
+              installCustomStorageClass: false 
+              persistence:
+                enabled: true
+                storageClass: gp3
+                size: 20Gi
+
+            zookeeper:
+              persistence:
+                enabled: true
+                storageClass: gp3
+                size: 5Gi
+              resources:
+                limits:
+                  cpu: 500m
+                  memory: 512Mi
+                requests:
+                  cpu: 200m
+                  memory: 256Mi
 
       destination:
         server: '{{server}}'
