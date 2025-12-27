@@ -28,7 +28,7 @@ spec:
   template:
     metadata:
       annotations:
-        instrumentation.opentelemetry.io/inject-nodejs: 'true'
+        instrumentation.opentelemetry.io/inject-nodejs: 'bookinfo-ratings'
       labels:
         app: ratings
         version: v1

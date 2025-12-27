@@ -28,7 +28,7 @@ spec:
   template:
     metadata:
       annotations:
-        instrumentation.opentelemetry.io/inject-java: 'true'
+        instrumentation.opentelemetry.io/inject-java: 'bookinfo-reviews'
       labels:
         app: reviews
         version: v1
@@ -69,7 +69,7 @@ spec:
   template:
     metadata:
       annotations:
-        instrumentation.opentelemetry.io/inject-java: 'true'
+        instrumentation.opentelemetry.io/inject-java: 'bookinfo-reviews'
       labels:
         app: reviews
         version: v2
@@ -110,7 +110,7 @@ spec:
   template:
     metadata:
       annotations:
-        instrumentation.opentelemetry.io/inject-java: 'true'
+        instrumentation.opentelemetry.io/inject-java: 'bookinfo-reviews'
       labels:
         app: reviews
         version: v3
