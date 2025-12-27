@@ -11,6 +11,8 @@ spec:
   http:
   - match:
     - uri:
+        exact: /
+    - uri:
         exact: /productpage
     - uri:
         prefix: /static
