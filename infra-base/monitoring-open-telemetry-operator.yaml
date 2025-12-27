@@ -41,6 +41,13 @@ spec:
                 enabled: false
               autoGenerateCert:
                 enabled: true
+              failurePolicy: Ignore
+
+            admissionWebhooks:
+              certManager:
+                enabled: false
+              autoGenerateCert:
+                enabled: true
                 recreate: true
 
       destination:
@@ -53,3 +60,4 @@ spec:
         syncOptions:
           - CreateNamespace=true
           - ServerSideApply=true
+          - SkipDryRunOnMissingResource=true
