@@ -124,7 +124,7 @@ spec:
               istio: ingressgateway
       destination:
         server: '{{server}}'
-        namespace: istio-ingress
+        namespace: istio-system
       syncPolicy:
         automated:
           prune: true
