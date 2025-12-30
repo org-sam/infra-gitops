@@ -9,7 +9,7 @@ spec:
       elements:
       - name: dev-demo
         server: https://kubernetes.default.svc
-        vpc_id: vpc-0e45258846197c203
+        vpc_id: vpc-08b5c2d510ef1518b
         revision: 1.16.0
 
   template:
