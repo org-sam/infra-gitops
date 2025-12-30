@@ -25,6 +25,11 @@ spec:
       destination:
         server: '{{server}}'
         namespace: istio-system
+      ignoreDifferences:
+        - group: admissionregistration.k8s.io
+          kind: ValidatingWebhookConfiguration
+          jqPathExpressions:
+            - '.webhooks[]?.failurePolicy'
       syncPolicy:
         automated:
           prune: true
@@ -68,6 +73,11 @@ spec:
       destination:
         server: '{{server}}'
         namespace: istio-system
+      ignoreDifferences:
+        - group: admissionregistration.k8s.io
+          kind: ValidatingWebhookConfiguration
+          jqPathExpressions:
+            - '.webhooks[]?.failurePolicy'
       syncPolicy:
         automated:
           prune: true
