@@ -32,7 +32,6 @@ spec:
         prometheus.io/port: "9080"
         prometheus.io/path: "/metrics"
         instrumentation.opentelemetry.io/inject-python: 'bookinfo-productpage'
-        sidecar.istio.io/inject: "true"
       labels:
         app: productpage
         version: v1
