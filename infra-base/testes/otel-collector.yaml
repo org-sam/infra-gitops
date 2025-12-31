@@ -62,9 +62,6 @@ spec:
                   endpoint: "monitoring-tempo-dev-demo.monitoring.svc:4317"
                   tls:
                     insecure: true
-                
-                loki:
-                  endpoint: "http://monitoring-loki-dev-demo.monitoring.svc:3100/loki/api/v1/push"
 
                 debug:
                   verbosity: detailed
@@ -75,15 +72,6 @@ spec:
                     receivers: [otlp]
                     processors: [k8sattributes, batch]
                     exporters: [otlp, debug]
-                  
-                  # --- NOVO: Pipeline de Logs ---
-                  logs:
-                    # Recebe do Istio via OTLP (mesma porta dos traces)
-                    receivers: [otlp]
-                    # Enriquece com metadados K8s e faz batching
-                    processors: [k8sattributes, batch]
-                    # Envia para o Loki
-                    exporters: [loki, debug]
 
             clusterRole:
               create: true

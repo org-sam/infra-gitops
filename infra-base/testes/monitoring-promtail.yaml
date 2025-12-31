@@ -1,0 +1,38 @@
+apiVersion: argoproj.io/v1alpha1
+kind: ApplicationSet
+metadata:
+  name: monitoring-promtail
+  namespace: argocd
+spec:
+  generators:
+  - list:
+      elements:
+      - name: dev-demo
+        server: https://kubernetes.default.svc
+        revision: 6.17.1
+
+  template:
+    metadata:
+      name: 'monitoring-promtail-{{name}}'
+    spec:
+      project: hands-on
+      source:
+        repoURL: 'https://grafana.github.io/helm-charts'
+        chart: promtail
+        targetRevision: '{{revision}}'
+        helm:
+          valuesObject:
+            config:
+              clients:
+                - url: http://monitoring-loki-dev-demo-gateway.monitoring.svc:80/loki/api/v1/push
+
+      destination:
+        server: '{{server}}'
+        namespace: monitoring
+      syncPolicy:
+        automated:
+          prune: true
+          selfHeal: true
+        syncOptions:
+          - CreateNamespace=true
+          - ServerSideApply=true

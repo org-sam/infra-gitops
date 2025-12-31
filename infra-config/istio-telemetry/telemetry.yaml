@@ -18,8 +18,3 @@ spec:
     - providers:
         - name: otel-tracing
       randomSamplingPercentage: 100.0
-  
-  # Access Logs OpenTelemetry
-  accessLogging:
-    - providers:
-        - name: otel-logging
