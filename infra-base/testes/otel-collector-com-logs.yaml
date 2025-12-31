@@ -56,13 +56,6 @@ spec:
                       - tag_name: app
                         key: app
                         from: pod
-                resource:
-                  - source_name: k8s.namespace.name
-                    target_name: k8s.namespace.name
-                  - source_name: k8s.deployment.name
-                    target_name: k8s.deployment.name
-                  - source_name: k8s.container.name
-                    target_name: k8s.container.name
 
               exporters:
                 otlp:
