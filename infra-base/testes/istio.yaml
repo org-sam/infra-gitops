@@ -70,6 +70,30 @@ spec:
         targetRevision: 1.28.2
         helm:
           releaseName: istiod
+          valuesObject:
+            meshConfig:
+              accessLogFile: /dev/stdout
+              enablePrometheusMerge: true
+              enableTracing: true
+              defaultConfig:
+                tracing:
+                  sampling: 100
+              extensionProviders:
+                - name: otel-tracing
+                  opentelemetry:
+                    port: 4317
+                    service: otel-collector.monitoring.svc.cluster.local
+                - name: otel-logging
+                  envoyOtelAls:
+                    port: 4317
+                    service: otel-collector.monitoring.svc.cluster.local
+                - name: prometheus
+                  prometheus: {}
+              defaultProviders:
+                tracing:
+                  - otel-tracing
+                accessLogging:
+                  - otel-logging
       destination:
         server: '{{server}}'
         namespace: istio-system
