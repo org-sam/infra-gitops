@@ -3,6 +3,8 @@ kind: PodMonitor
 metadata:
   name: envoy-stats
   namespace: istio-system
+  labels:
+    release: monitoring-base-dev-demo
 spec:
   selector:
     matchExpressions:
