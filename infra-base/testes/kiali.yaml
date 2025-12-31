@@ -27,7 +27,7 @@ spec:
               strategy: anonymous
             external_services:
               prometheus:
-                url: "http://monitoring-base-{{name}}-kube-p-prometheus.monitoring.svc:9090"
+                url: "http://monitoring-base-{{name}}-k-prometheus.monitoring.svc:9090"
               grafana:
                 enabled: true
                 url: "http://monitoring-base-{{name}}-grafana.monitoring.svc:80"
