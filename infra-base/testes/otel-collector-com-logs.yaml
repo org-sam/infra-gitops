@@ -61,7 +61,7 @@ spec:
                 
                 # --- NOVO: Configuração para o Loki (Logs) ---
                 loki:
-                  endpoint: "http://loki.monitoring.svc:3100/loki/api/v1/push"
+                  endpoint: "http://monitoring-loki-dev-demo.monitoring.svc:3100/loki/api/v1/push"
                   tls:
                     insecure: true
 
