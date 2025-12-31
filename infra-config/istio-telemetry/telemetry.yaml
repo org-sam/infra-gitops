@@ -1,0 +1,25 @@
+apiVersion: telemetry.istio.io/v1
+kind: Telemetry
+metadata:
+  name: mesh-observability
+  namespace: istio-system
+spec:
+  # Métricas Prometheus
+  metrics:
+    - providers:
+        - name: prometheus
+      overrides:
+        - match:
+            metric: ALL_METRICS
+          disabled: false
+  
+  # Tracing OpenTelemetry
+  tracing:
+    - providers:
+        - name: otel-tracing
+      randomSamplingPercentage: 100.0
+  
+  # Access Logs OpenTelemetry
+  accessLogging:
+    - providers:
+        - name: otel-logging
