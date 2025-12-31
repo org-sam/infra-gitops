@@ -1,68 +1,68 @@
-# apiVersion: opentelemetry.io/v1alpha1
-# kind: Instrumentation
-# metadata:
-#   name: bookinfo-productpage
-#   namespace: bookinfo
-# spec:
-#   resource:
-#     resourceAttributes:
-#       service.name: productpage
-#   exporter:
-#     endpoint: http://otel-collector.monitoring.svc:4318
-#   python:
-#     env:
-#       - name: OTEL_EXPORTER_OTLP_PROTOCOL
-#         value: http/protobuf
-#     image: ghcr.io/open-telemetry/opentelemetry-operator/autoinstrumentation-python:latest
-#   propagators:
-#     - tracecontext
-#     - baggage
-#   sampler:
-#     argument: '1.0'
-#     type: parentbased_traceidratio
-# ---
-# apiVersion: opentelemetry.io/v1alpha1
-# kind: Instrumentation
-# metadata:
-#   name: bookinfo-reviews
-#   namespace: bookinfo
-# spec:
-#   resource:
-#     resourceAttributes:
-#       service.name: reviews
-#   exporter:
-#     endpoint: http://otel-collector.monitoring.svc:4318
-#   java:
-#     env:
-#       - name: OTEL_EXPORTER_OTLP_PROTOCOL
-#         value: http/protobuf
-#     image: ghcr.io/open-telemetry/opentelemetry-operator/autoinstrumentation-java:latest
-#   propagators:
-#     - tracecontext
-#     - baggage
-#   sampler:
-#     argument: '1.0'
-#     type: parentbased_traceidratio
-# ---
-# apiVersion: opentelemetry.io/v1alpha1
-# kind: Instrumentation
-# metadata:
-#   name: bookinfo-ratings
-#   namespace: bookinfo
-# spec:
-#   resource:
-#     resourceAttributes:
-#       service.name: ratings
-#   exporter:
-#     endpoint: http://otel-collector.monitoring.svc:4318
-#   nodejs:
-#     env:
-#       - name: OTEL_EXPORTER_OTLP_PROTOCOL
-#         value: http/protobuf
-#     image: ghcr.io/open-telemetry/opentelemetry-operator/autoinstrumentation-nodejs:latest
-#   propagators:
-#     - tracecontext
-#     - baggage
-#   sampler:
-#     argument: '1.0'
-#     type: parentbased_traceidratio
+apiVersion: opentelemetry.io/v1alpha1
+kind: Instrumentation
+metadata:
+  name: bookinfo-productpage
+  namespace: bookinfo
+spec:
+  resource:
+    resourceAttributes:
+      service.name: productpage
+  exporter:
+    endpoint: http://otel-collector.monitoring.svc:4318
+  python:
+    env:
+      - name: OTEL_EXPORTER_OTLP_PROTOCOL
+        value: http/protobuf
+    image: ghcr.io/open-telemetry/opentelemetry-operator/autoinstrumentation-python:latest
+  propagators:
+    - tracecontext
+    - baggage
+  sampler:
+    argument: '1.0'
+    type: parentbased_traceidratio
+---
+apiVersion: opentelemetry.io/v1alpha1
+kind: Instrumentation
+metadata:
+  name: bookinfo-reviews
+  namespace: bookinfo
+spec:
+  resource:
+    resourceAttributes:
+      service.name: reviews
+  exporter:
+    endpoint: http://otel-collector.monitoring.svc:4318
+  java:
+    env:
+      - name: OTEL_EXPORTER_OTLP_PROTOCOL
+        value: http/protobuf
+    image: ghcr.io/open-telemetry/opentelemetry-operator/autoinstrumentation-java:latest
+  propagators:
+    - tracecontext
+    - baggage
+  sampler:
+    argument: '1.0'
+    type: parentbased_traceidratio
+---
+apiVersion: opentelemetry.io/v1alpha1
+kind: Instrumentation
+metadata:
+  name: bookinfo-ratings
+  namespace: bookinfo
+spec:
+  resource:
+    resourceAttributes:
+      service.name: ratings
+  exporter:
+    endpoint: http://otel-collector.monitoring.svc:4318
+  nodejs:
+    env:
+      - name: OTEL_EXPORTER_OTLP_PROTOCOL
+        value: http/protobuf
+    image: ghcr.io/open-telemetry/opentelemetry-operator/autoinstrumentation-nodejs:latest
+  propagators:
+    - tracecontext
+    - baggage
+  sampler:
+    argument: '1.0'
+    type: parentbased_traceidratio
