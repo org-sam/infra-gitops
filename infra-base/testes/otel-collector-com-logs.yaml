@@ -57,14 +57,12 @@ spec:
                         key: app
                         from: pod
                 resource:
-                  - from: resource_attribute
-                    key: k8s.namespace.name
-                  - from: resource_attribute
-                    key: k8s.deployment.name
-                  - from: resource_attribute
-                    key: k8s.container.name
-                  - from: resource_attribute
-                    key: app
+                  - source_name: k8s.namespace.name
+                    target_name: k8s.namespace.name
+                  - source_name: k8s.deployment.name
+                    target_name: k8s.deployment.name
+                  - source_name: k8s.container.name
+                    target_name: k8s.container.name
 
               exporters:
                 otlp:
@@ -74,15 +72,6 @@ spec:
                 
                 loki:
                   endpoint: "http://monitoring-loki-dev-demo.monitoring.svc:3100/loki/api/v1/push"
-                  default_labels_enabled:
-                    exporter: false
-                    job: true
-                  labels:
-                    resource:
-                      k8s.namespace.name: "namespace"
-                      k8s.deployment.name: "deployment"
-                      k8s.container.name: "container"
-                      app: "app"
 
                 debug:
                   verbosity: detailed
