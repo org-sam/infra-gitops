@@ -5,7 +5,7 @@ metadata:
   namespace: bookinfo
 spec:
   gateways:
-  - bookinfo-gateway
+  - istio-system/shared-gateway
   hosts:
   - bookinfo.mkt.posanhanguera.com.br
   http:

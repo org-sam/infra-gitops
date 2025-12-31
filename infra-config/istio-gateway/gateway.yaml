@@ -1,8 +1,8 @@
 apiVersion: networking.istio.io/v1
 kind: Gateway
 metadata:
-  name: bookinfo-gateway
-  namespace: bookinfo
+  name: shared-gateway
+  namespace: istio-system
 spec:
   selector:
     istio: ingressgateway
@@ -12,4 +12,4 @@ spec:
       name: http
       protocol: HTTP
     hosts:
-    - bookinfo.mkt.posanhanguera.com.br
+    - "*.mkt.posanhanguera.com.br"
