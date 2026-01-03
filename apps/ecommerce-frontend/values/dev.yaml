@@ -69,11 +69,11 @@ env:
   OTEL_SERVICE_NAME: "ecommerce-frontend"
 
 opentelemetry:
-  enabled: false
+  enabled: true
   type: nodejs
 
-podAnnotations:
-  instrumentation.opentelemetry.io/inject-nodejs: "ecommerce-frontend/ecommerce-frontend"
+# podAnnotations:
+#   instrumentation.opentelemetry.io/inject-nodejs: "ecommerce-frontend/ecommerce-frontend"
 
 istio:
   enabled: true
@@ -82,4 +82,4 @@ istio:
   destinationPort: 80
 
 namespace:
-  istioInjection: true
+  istioInjection: false
