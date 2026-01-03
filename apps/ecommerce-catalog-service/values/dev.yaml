@@ -71,6 +71,6 @@ namespace:
 
 istio:
   enabled: true
-  gateway: "istio-system/shared-gateway"
-  host: "ecommerce-catalog-service.ecommerce-catalog-service"
+  gateway: "mesh"
+  host: "ecommerce-catalog-service.ecommerce-catalog-service.svc.cluster.local"
   destinationPort: 80
