@@ -41,14 +41,8 @@ spec:
                 enabled: false
               autoGenerateCert:
                 enabled: true
-              failurePolicy: Ignore
-
-            admissionWebhooks:
-              certManager:
-                enabled: false
-              autoGenerateCert:
-                enabled: true
                 recreate: true
+              failurePolicy: Ignore
 
       destination:
         server: '{{server}}'

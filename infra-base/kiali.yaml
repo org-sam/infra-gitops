@@ -14,32 +14,33 @@ spec:
     metadata:
       name: 'kiali-{{name}}'
       annotations:
-        argocd.argoproj.io/sync-wave: "3"
+        argocd.argoproj.io/sync-wave: "4"
     spec:
       project: hands-on
       source:
         repoURL: https://kiali.org/helm-charts
         chart: kiali-server
         targetRevision: '{{version}}'
-        # helm:
-        #   valuesObject:
-        #     auth:
-        #       strategy: anonymous
-        #     deployment:
-        #       sidecar_container_config:
-        #         tracing:
-        #           sampling: 100
-        #     external_services:
-        #       prometheus:
-        #         url: "http://monitoring-base-dev-demo-kube-p-prometheus.monitoring.svc:9090"
-        #       grafana:
-        #         enabled: true
-        #         url: "http://monitoring-base-dev-demo-grafana.monitoring.svc:80"
-        #       tracing:
-        #         enabled: true
-        #         type: "tempo"
-        #         url: "http://monitoring-tempo-dev-demo.monitoring.svc:3200"
-        #         use_grpc: false
+        helm:
+          valuesObject:
+            auth:
+              strategy: anonymous
+            external_services:
+              prometheus:
+                url: "http://monitoring-base-{{name}}-k-prometheus.monitoring.svc:9090"
+              grafana:
+                enabled: true
+                url: "http://monitoring-base-{{name}}-grafana.monitoring.svc:80"
+              tracing:
+                enabled: true
+                provider: tempo
+                tempo_config:
+                  org_id: "1"
+                  datasource_uid: "tempo"
+                internal_url: "http://monitoring-tempo-{{name}}.monitoring.svc:3200"
+                use_grpc: false
+              istio:
+                root_namespace: istio-system
       destination:
         server: '{{server}}'
         namespace: istio-system

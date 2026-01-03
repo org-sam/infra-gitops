@@ -9,7 +9,7 @@ spec:
       elements:
       - name: dev-demo
         server: https://kubernetes.default.svc
-        node_role_name: eks-node-initial-eks-node-group-20251227130124986200000001
+        node_role_name: eks-node-initial-eks-node-group-20260103185425698900000002
         environment: dev
 
   template:
