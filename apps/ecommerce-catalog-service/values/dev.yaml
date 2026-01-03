@@ -66,8 +66,5 @@ opentelemetry:
   enabled: true
   type: nodejs
 
-# podAnnotations:
-#   instrumentation.opentelemetry.io/inject-nodejs: "ecommerce-catalog-service/ecommerce-catalog-service"
-
 namespace:
   istioInjection: false

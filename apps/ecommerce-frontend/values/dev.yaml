@@ -72,9 +72,6 @@ opentelemetry:
   enabled: true
   type: nodejs
 
-# podAnnotations:
-#   instrumentation.opentelemetry.io/inject-nodejs: "ecommerce-frontend/ecommerce-frontend"
-
 istio:
   enabled: true
   gateway: "istio-system/shared-gateway"
