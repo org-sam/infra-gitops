@@ -62,6 +62,7 @@ spec:
       name: 'istiod-{{cluster}}'
       annotations:
         argocd.argoproj.io/sync-wave: "2"
+        argocd.argoproj.io/sync-options: SkipDryRunOnMissingResource=true
     spec:
       project: hands-on
       source:
@@ -102,12 +103,13 @@ spec:
           selfHeal: true
         syncOptions:
           - ServerSideApply=true
+          - RespectIgnoreDifferences=true
         retry:
-          limit: 3
+          limit: 5
           backoff:
-            duration: 5s
+            duration: 10s
             factor: 2
-            maxDuration: 3m
+            maxDuration: 5m
 
 ---
 
@@ -126,7 +128,8 @@ spec:
     metadata:
       name: 'istio-ingressgateway-{{cluster}}'
       annotations:
-        argocd.argoproj.io/sync-wave: "3"
+        argocd.argoproj.io/sync-wave: "4"
+        argocd.argoproj.io/sync-options: SkipDryRunOnMissingResource=true
     spec:
       project: hands-on
       source:
@@ -149,9 +152,10 @@ spec:
           selfHeal: true
         syncOptions:
           - CreateNamespace=true
+          - RespectIgnoreDifferences=true
         retry:
           limit: 5
           backoff:
-            duration: 10s
+            duration: 15s
             factor: 2
-            maxDuration: 5m
+            maxDuration: 10m
