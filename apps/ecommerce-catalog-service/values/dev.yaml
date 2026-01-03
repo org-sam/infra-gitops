@@ -68,9 +68,3 @@ opentelemetry:
 
 namespace:
   istioInjection: true
-
-istio:
-  enabled: true
-  gateway: "mesh"
-  host: "ecommerce-catalog-service.ecommerce-catalog-service"
-  destinationPort: 80
