@@ -24,7 +24,7 @@ spec:
         # Source 1: Chart OCI
         - repoURL: registry-1.docker.io/saiwmon
           chart: generic-chart
-          targetRevision: 1.0.8
+          targetRevision: 1.0.9
           helm:
             valueFiles:
               - $values/apps/{{namespace}}/values/{{environment}}.yaml
