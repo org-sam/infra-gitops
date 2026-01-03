@@ -63,8 +63,11 @@ env:
   OTEL_SERVICE_NAME: "ecommerce-catalog-service"
 
 opentelemetry:
-  enabled: true
+  enabled: false
   type: nodejs
+
+podAnnotations:
+  instrumentation.opentelemetry.io/inject-nodejs: "ecommerce-catalog-service/ecommerce-catalog-service"
 
 namespace:
   istioInjection: true
