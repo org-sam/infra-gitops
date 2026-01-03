@@ -68,3 +68,9 @@ opentelemetry:
 
 namespace:
   istioInjection: true
+
+istio:
+  enabled: true
+  gateway: "istio-system/shared-gateway"
+  host: "ecommerce-catalog-service.ecommerce-catalog-service"
+  destinationPort: 80
