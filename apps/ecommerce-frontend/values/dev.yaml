@@ -26,7 +26,7 @@ service:
   targetPort: 3000
 
 ingress:
-  enabled: false
+  enabled: true
   className: alb
 
   commonAnnotations:
@@ -39,10 +39,10 @@ ingress:
     kubernetes.io/ingress.class: alb
 
   annotations:
-    alb.ingress.kubernetes.io/group.name: dev-eks
+    alb.ingress.kubernetes.io/group.name: dev-demo
 
   hosts:
-    - host: ecommerce.dev.platosedu.io
+    - host: ecommerce.mkt.posanhanguera.com.br
       paths:
         - path: /
           pathType: Prefix
@@ -65,3 +65,12 @@ env:
 opentelemetry:
   enabled: true
   type: nodejs
+
+istio:
+  enabled: true
+  gateway: "istio-system/shared-gateway"
+  host: "ecommerce.mkt.posanhanguera.com.br"
+  destinationPort: 80
+
+namespace:
+  istioInjection: true
