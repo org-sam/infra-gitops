@@ -29,9 +29,15 @@ ingress:
   enabled: true
   className: alb
 
+  backend:
+    serviceName: istio-ingressgateway
+    servicePort: 80
+    namespace: istio-system
+
   commonAnnotations:
     alb.ingress.kubernetes.io/healthcheck-interval-seconds: "60"
-    alb.ingress.kubernetes.io/healthcheck-path: /
+    alb.ingress.kubernetes.io/healthcheck-path: /healthz/ready
+    alb.ingress.kubernetes.io/healthcheck-port: "15021"
     alb.ingress.kubernetes.io/listen-ports: '[{"HTTP": 80}]'
     alb.ingress.kubernetes.io/scheme: internet-facing
     alb.ingress.kubernetes.io/success-codes: "200"
