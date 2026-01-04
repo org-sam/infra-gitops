@@ -11,7 +11,7 @@ spec:
         server: https://kubernetes.default.svc
         revision: 1.19.0
         hostedZoneId: Z0728988PJ08PEQVVTVX
-        domainFilter: ""
+        domainFilter: mkt.posanhanguera.com.br
 
   template:
     metadata:
@@ -43,8 +43,10 @@ spec:
             policy: sync
             registry: txt
             txtOwnerId: "{{hostedZoneId}}"
+            txtPrefix: "external-dns-"
             
-            domainFilters: []
+            domainFilters:
+            - "{{domainFilter}}"
             
             serviceAccount:
               create: true
