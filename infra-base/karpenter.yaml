@@ -9,8 +9,8 @@ spec:
       elements:
       - name: dev-demo
         server: https://kubernetes.default.svc
-        api_endpoint: https://B597CD8A3C3C2B12F3B112C8AAFF8A0D.gr7.us-east-2.eks.amazonaws.com
-        role_arn: arn:aws:iam::732263836773:role/KarpenterController-2026010319071804030000001a
+        api_endpoint: https://1BC8E48CE5FF6FE009AD23D8FEE2A20E.gr7.us-east-2.eks.amazonaws.com
+        role_arn: arn:aws:iam::072201222931:role/KarpenterController-2026012001250913180000001a
         queue_name: Karpenter-dev-demo
         revision: 1.8.2
 
