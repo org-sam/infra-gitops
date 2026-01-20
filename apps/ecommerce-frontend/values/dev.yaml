@@ -7,10 +7,6 @@ image:
   tag: latest
   pullPolicy: Always
 
-container:
-  name: ecommerce-frontend
-  port: 3000
-
 resources:
   requests:
     cpu: 100m
@@ -18,40 +14,6 @@ resources:
   limits:
     cpu: 500m
     memory: 512Mi
-
-service:
-  enabled: true
-  type: ClusterIP
-  port: 80
-  targetPort: 3000
-
-ingress:
-  enabled: true
-  className: alb
-
-  backend:
-    serviceName: istio-ingressgateway
-    servicePort: 80
-    namespace: istio-system
-
-  commonAnnotations:
-    alb.ingress.kubernetes.io/healthcheck-interval-seconds: "60"
-    alb.ingress.kubernetes.io/healthcheck-path: /healthz/ready
-    alb.ingress.kubernetes.io/healthcheck-port: "15021"
-    alb.ingress.kubernetes.io/listen-ports: '[{"HTTP": 80}]'
-    alb.ingress.kubernetes.io/scheme: internet-facing
-    alb.ingress.kubernetes.io/success-codes: "200"
-    alb.ingress.kubernetes.io/target-type: ip
-    kubernetes.io/ingress.class: alb
-
-  annotations:
-    alb.ingress.kubernetes.io/group.name: dev-demo
-
-  hosts:
-    - host: ecommerce.mkt.posanhanguera.com.br
-      paths:
-        - path: /
-          pathType: Prefix
 
 autoscaling:
   enabled: true
@@ -68,15 +30,76 @@ env:
   NEXT_PUBLIC_ORDER_SERVICE_URL: "http://localhost:3002"
   OTEL_SERVICE_NAME: "ecommerce-frontend"
 
-opentelemetry:
+container:
+  name: ecommerce-frontend
+  port: 3000
+
+service:
   enabled: true
-  type: nodejs
+  type: ClusterIP
+  port: 80
+  targetPort: 3000
+
+# ingress:
+#   enabled: true
+#   className: alb
+
+#   backend:
+#     serviceName: istio-ingressgateway
+#     servicePort: 80
+#     namespace: istio-system
+
+#   commonAnnotations:
+#     alb.ingress.kubernetes.io/healthcheck-interval-seconds: "60"
+#     alb.ingress.kubernetes.io/healthcheck-path: /healthz/ready
+#     alb.ingress.kubernetes.io/healthcheck-port: "15021"
+#     alb.ingress.kubernetes.io/listen-ports: '[{"HTTP": 80}]'
+#     alb.ingress.kubernetes.io/scheme: internet-facing
+#     alb.ingress.kubernetes.io/success-codes: "200"
+#     alb.ingress.kubernetes.io/target-type: ip
+#     kubernetes.io/ingress.class: alb
+
+#   annotations:
+#     alb.ingress.kubernetes.io/group.name: dev-demo
+
+#   hosts:
+#     - host: ecommerce.mkt.posanhanguera.com.br
+#       paths:
+#         - path: /
+#           pathType: Prefix
+
+ingress:
+  enabled: true
+  className: alb
+
+  commonAnnotations:
+    alb.ingress.kubernetes.io/healthcheck-interval-seconds: "60"
+    alb.ingress.kubernetes.io/healthcheck-path: /
+    alb.ingress.kubernetes.io/healthcheck-port: "80"
+    alb.ingress.kubernetes.io/listen-ports: '[{"HTTP": 80}]'
+    alb.ingress.kubernetes.io/scheme: internet-facing
+    alb.ingress.kubernetes.io/success-codes: "200"
+    alb.ingress.kubernetes.io/target-type: ip
+    kubernetes.io/ingress.class: alb
+
+  annotations:
+    alb.ingress.kubernetes.io/group.name: dev-demo
+
+  hosts:
+    - host: ecommerce.mkt.posanhanguera.com.br
+      paths:
+        - path: /
+          pathType: Prefix
 
 istio:
-  enabled: true
+  enabled: false
   gateway: "istio-system/shared-gateway"
   host: "ecommerce.mkt.posanhanguera.com.br"
   destinationPort: 80
 
 namespace:
   istioInjection: false
+
+opentelemetry:
+  enabled: true
+  type: nodejs

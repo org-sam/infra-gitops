@@ -1,31 +1,31 @@
-apiVersion: argoproj.io/v1alpha1
-kind: ApplicationSet
-metadata:
-  name: istio-telemetry-config
-  namespace: argocd
-spec:
-  generators:
-    - list:
-        elements:
-          - cluster: dev-demo
-            server: https://kubernetes.default.svc
-  template:
-    metadata:
-      name: 'istio-telemetry-config-{{cluster}}'
-      annotations:
-        argocd.argoproj.io/sync-wave: "5"
-    spec:
-      project: hands-on
-      source:
-        repoURL: https://github.com/org-sam/infra-gitops.git
-        path: infra-config/istio-telemetry
-        targetRevision: HEAD
-      destination:
-        server: '{{server}}'
-        namespace: istio-system
-      syncPolicy:
-        automated:
-          prune: true
-          selfHeal: true
-        syncOptions:
-          - ServerSideApply=true
+# apiVersion: argoproj.io/v1alpha1
+# kind: ApplicationSet
+# metadata:
+#   name: istio-telemetry-config
+#   namespace: argocd
+# spec:
+#   generators:
+#     - list:
+#         elements:
+#           - cluster: dev-demo
+#             server: https://kubernetes.default.svc
+#   template:
+#     metadata:
+#       name: 'istio-telemetry-config-{{cluster}}'
+#       annotations:
+#         argocd.argoproj.io/sync-wave: "5"
+#     spec:
+#       project: hands-on
+#       source:
+#         repoURL: https://github.com/org-sam/infra-gitops.git
+#         path: infra-config/istio-telemetry
+#         targetRevision: HEAD
+#       destination:
+#         server: '{{server}}'
+#         namespace: istio-system
+#       syncPolicy:
+#         automated:
+#           prune: true
+#           selfHeal: true
+#         syncOptions:
+#           - ServerSideApply=true
