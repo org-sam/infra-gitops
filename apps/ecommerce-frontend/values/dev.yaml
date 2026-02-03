@@ -4,7 +4,7 @@ fullnameOverride: ecommerce-frontend
 
 image:
   repository: saiwmon/ecommerce-frontend
-  tag: latest
+  tag: staging-gamma-22
   pullPolicy: Always
 
 resources:
