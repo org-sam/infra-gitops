@@ -68,38 +68,38 @@ service:
 #         - path: /
 #           pathType: Prefix
 
-ingress:
-  enabled: true
-  className: alb
+# # ingress:
+# #   enabled: true
+# #   className: alb
 
-  commonAnnotations:
-    alb.ingress.kubernetes.io/healthcheck-interval-seconds: "60"
-    alb.ingress.kubernetes.io/healthcheck-path: /
-    alb.ingress.kubernetes.io/healthcheck-port: "80"
-    alb.ingress.kubernetes.io/listen-ports: '[{"HTTP": 80}]'
-    alb.ingress.kubernetes.io/scheme: internet-facing
-    alb.ingress.kubernetes.io/success-codes: "200"
-    alb.ingress.kubernetes.io/target-type: ip
-    kubernetes.io/ingress.class: alb
+# #   commonAnnotations:
+# #     alb.ingress.kubernetes.io/healthcheck-interval-seconds: "60"
+# #     alb.ingress.kubernetes.io/healthcheck-path: /
+# #     alb.ingress.kubernetes.io/healthcheck-port: "80"
+# #     alb.ingress.kubernetes.io/listen-ports: '[{"HTTP": 80}]'
+# #     alb.ingress.kubernetes.io/scheme: internet-facing
+# #     alb.ingress.kubernetes.io/success-codes: "200"
+# #     alb.ingress.kubernetes.io/target-type: ip
+# #     kubernetes.io/ingress.class: alb
 
-  annotations:
-    alb.ingress.kubernetes.io/group.name: dev-demo
+# #   annotations:
+# #     alb.ingress.kubernetes.io/group.name: dev-demo
 
-  hosts:
-    - host: ecommerce.mkt.posanhanguera.com.br
-      paths:
-        - path: /
-          pathType: Prefix
+# #   hosts:
+# #     - host: ecommerce.mkt.posanhanguera.com.br
+# #       paths:
+# #         - path: /
+# #           pathType: Prefix
 
-istio:
-  enabled: false
-  gateway: "istio-system/shared-gateway"
-  host: "ecommerce.mkt.posanhanguera.com.br"
-  destinationPort: 80
+# # istio:
+# #   enabled: false
+# #   gateway: "istio-system/shared-gateway"
+# #   host: "ecommerce.mkt.posanhanguera.com.br"
+# #   destinationPort: 80
 
-namespace:
-  istioInjection: false
+# # namespace:
+# #   istioInjection: false
 
-opentelemetry:
-  enabled: true
-  type: nodejs
+# # opentelemetry:
+# #   enabled: true
+# #   type: nodejs
