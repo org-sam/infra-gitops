@@ -1,24 +1,22 @@
 fullnameOverride: ecommerce-frontend
 
-# replicaCount: 1
-
 image:
   repository: saiwmon/ecommerce-frontend
-  tag: staging-gamma-22
-  pullPolicy: Always
+  tag: v1.0.0  # This will be updated by CI/CD
+  pullPolicy: IfNotPresent
 
 resources:
   requests:
-    cpu: 100m
-    memory: 100Mi
+    cpu: 200m
+    memory: 256Mi
   limits:
-    cpu: 500m
-    memory: 512Mi
+    cpu: 1000m
+    memory: 1Gi
 
 autoscaling:
   enabled: true
-  minReplicas: 1
-  maxReplicas: 5
+  minReplicas: 2
+  maxReplicas: 10
   triggers:
     - type: cpu
       metricType: Utilization
@@ -29,6 +27,7 @@ env:
   NEXT_PUBLIC_CATALOG_SERVICE_URL: "http://ecommerce-catalog-service.ecommerce-catalog-service"
   NEXT_PUBLIC_ORDER_SERVICE_URL: "http://localhost:3002"
   OTEL_SERVICE_NAME: "ecommerce-frontend"
+  NODE_ENV: "staging"
 
 container:
   name: ecommerce-frontend
@@ -39,34 +38,6 @@ service:
   type: ClusterIP
   port: 80
   targetPort: 3000
-
-# ingress:
-#   enabled: true
-#   className: alb
-
-#   backend:
-#     serviceName: istio-ingressgateway
-#     servicePort: 80
-#     namespace: istio-system
-
-#   commonAnnotations:
-#     alb.ingress.kubernetes.io/healthcheck-interval-seconds: "60"
-#     alb.ingress.kubernetes.io/healthcheck-path: /healthz/ready
-#     alb.ingress.kubernetes.io/healthcheck-port: "15021"
-#     alb.ingress.kubernetes.io/listen-ports: '[{"HTTP": 80}]'
-#     alb.ingress.kubernetes.io/scheme: internet-facing
-#     alb.ingress.kubernetes.io/success-codes: "200"
-#     alb.ingress.kubernetes.io/target-type: ip
-#     kubernetes.io/ingress.class: alb
-
-#   annotations:
-#     alb.ingress.kubernetes.io/group.name: dev-demo
-
-#   hosts:
-#     - host: ecommerce.mkt.posanhanguera.com.br
-#       paths:
-#         - path: /
-#           pathType: Prefix
 
 ingress:
   enabled: true
@@ -83,10 +54,10 @@ ingress:
     kubernetes.io/ingress.class: alb
 
   annotations:
-    alb.ingress.kubernetes.io/group.name: dev-demo
+    alb.ingress.kubernetes.io/group.name: staging-demo
 
   hosts:
-    - host: ecommerce.mkt.posanhanguera.com.br
+    - host: staging.ecommerce.mkt.posanhanguera.com.br
       paths:
         - path: /
           pathType: Prefix
@@ -94,7 +65,7 @@ ingress:
 istio:
   enabled: false
   gateway: "istio-system/shared-gateway"
-  host: "ecommerce.mkt.posanhanguera.com.br"
+  host: "staging.ecommerce.mkt.posanhanguera.com.br"
   destinationPort: 80
 
 namespace:

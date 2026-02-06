@@ -11,6 +11,14 @@ spec:
             url: https://kubernetes.default.svc
             namespace: ecommerce-frontend
             environment: dev
+          - cluster: cluster-staging
+            url: https://kubernetes.default.svc
+            namespace: ecommerce-frontend
+            environment: staging
+          - cluster: cluster-prod
+            url: https://kubernetes.default.svc
+            namespace: ecommerce-frontend
+            environment: prod
   template:
     metadata:
       name: "{{namespace}}-{{environment}}"
